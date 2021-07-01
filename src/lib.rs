@@ -1,9 +1,9 @@
 pub(crate) mod operations;
+pub(crate) mod path_items;
 pub(crate) mod paths;
 
 use openapiv3::OpenAPI;
 use paths::PathsDiff;
-use serde_json;
 use thiserror::Error;
 
 /// DiffError enumerates all possible errors returned by this library.
