@@ -2,7 +2,7 @@
 
 > Everything changes and nothing stands still.
 
-Get a list of changes between two OpenAPI descriptions.
+Get the difference between two OpenAPI descriptions.
 
 ## CLI
 
@@ -27,6 +27,12 @@ Here is the list of OpenAPI objects and properties oaidiff currently compares.
   - [ ] Extensions
 - [ ] Servers Object
 - [ ] Paths
+  - [x] Path Added
+  - [x] Path Removed
+  - [ ] Path Changed
+    - [ ] Path Item Added
+    - [ ] Path Item Removed
+    - [ ] Path Item Changed
 - [ ] Components
 - [ ] Security
 - [ ] Tags

@@ -2,6 +2,7 @@ pub(crate) mod operations;
 pub(crate) mod paths;
 
 use openapiv3::OpenAPI;
+use paths::{diff_paths, PathsDiff};
 use serde_json;
 use thiserror::Error;
 
@@ -41,6 +42,7 @@ impl OpenAPIVersionDiff {
 #[derive(Debug)]
 pub struct Diff {
     version_diff: Option<OpenAPIVersionDiff>,
+    paths_diff: PathsDiff,
 }
 
 pub fn diff_json(base: &str, head: &str) -> Result<Diff, DiffError> {
@@ -53,7 +55,11 @@ pub fn diff_json(base: &str, head: &str) -> Result<Diff, DiffError> {
 
 pub fn diff(base: OpenAPI, head: OpenAPI) -> Result<Diff, DiffError> {
     let version_diff = diff_versions(base.openapi, head.openapi);
-    Ok(Diff { version_diff })
+    let paths_diff = diff_paths(&base.paths, &head.paths)?;
+    Ok(Diff {
+        version_diff,
+        paths_diff,
+    })
 }
 
 fn diff_versions(base: String, head: String) -> Option<OpenAPIVersionDiff> {
