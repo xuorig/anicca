@@ -1,4 +1,5 @@
 use openapiv3::OpenAPI;
+use serde_json;
 use thiserror::Error;
 
 /// DiffError enumerates all possible errors returned by this library.
@@ -11,6 +12,10 @@ pub enum DiffError {
     /// Represents all cases of `std::io::Error`.
     #[error(transparent)]
     IOError(#[from] std::io::Error),
+
+    /// Represents all cases of `serde_json::Error`.
+    #[error(transparent)]
+    SerdeError(#[from] serde_json::Error),
 }
 
 /// OpenAPIVersionChange represents a change in the OpenAPI specification version
@@ -54,6 +59,14 @@ impl Diff {
     }
 }
 
+pub fn diff_json(base: &str, head: &str) -> Result<Diff, DiffError> {
+    let base_contents = std::fs::read_to_string(base)?;
+    let head_contents = std::fs::read_to_string(head)?;
+    let base_openapi: OpenAPI = serde_json::from_str(&base_contents)?;
+    let head_openapi: OpenAPI = serde_json::from_str(&head_contents)?;
+    diff(base_openapi, head_openapi)
+}
+
 pub fn diff(base: OpenAPI, head: OpenAPI) -> Result<Diff, DiffError> {
     let mut changes = vec![];
 
@@ -70,6 +83,20 @@ pub fn diff(base: OpenAPI, head: OpenAPI) -> Result<Diff, DiffError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn from_json_files() {
+        let diff = diff_json("fixtures/pet-store.json", "fixtures/pet-store-changed.json")
+            .expect("Failed to diff JSON");
+
+        assert_eq!(diff.changes.len(), 1);
+        let version_change = diff.changes.first().unwrap();
+
+        assert_eq!(
+            "OpenAPI specification version changed from 3.0.0 to 3.1.0.",
+            version_change.message()
+        );
+    }
 
     #[test]
     fn openapi_version_change() {
