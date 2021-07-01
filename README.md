@@ -30,9 +30,22 @@ Here is the list of OpenAPI objects and properties oaidiff currently compares.
   - [x] Path Added
   - [x] Path Removed
   - [ ] Path Changed
-    - [ ] Path Item Added
-    - [ ] Path Item Removed
-    - [ ] Path Item Changed
+    - [x] Operation Added
+    - [x] Operation Removed
+    - [ ] Operation Changed
+      - [x] Operation Id Changed 
+      - [x] Summary Changed 
+      - [x] Description Changed 
+      - [x] Tags Changed 
+      - [ ] External Documentation
+      - [ ] Parameters
+      - [ ] Parameters
+      - [ ] Request Body
+      - [ ] Responses
+      - [ ] Deprecated
+      - [ ] Security
+      - [ ] Servers
+      - [ ] Extensions
 - [ ] Components
 - [ ] Security
 - [ ] Tags
