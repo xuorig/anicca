@@ -81,8 +81,11 @@ mod tests {
 
     #[test]
     fn from_json_files() {
-        let diff = diff_json("fixtures/pet-store.json", "fixtures/pet-store-changed.json")
-            .expect("Failed to diff JSON");
+        let diff = diff_json(
+            PathBuf::from("fixtures/pet-store.json"),
+            PathBuf::from("fixtures/pet-store-changed.json"),
+        )
+        .expect("Failed to diff JSON");
 
         let version_change = diff.version_diff.unwrap();
 
