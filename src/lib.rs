@@ -1,3 +1,6 @@
+pub(crate) mod operations;
+pub(crate) mod paths;
+
 use openapiv3::OpenAPI;
 use serde_json;
 use thiserror::Error;
@@ -21,12 +24,12 @@ pub enum DiffError {
 /// OpenAPIVersionChange represents a change in the OpenAPI specification version
 /// between documents.
 #[derive(Debug)]
-pub struct OpenAPIVersionChange {
+pub struct OpenAPIVersionDiff {
     from: String,
     to: String,
 }
 
-impl OpenAPIVersionChange {
+impl OpenAPIVersionDiff {
     pub fn message(&self) -> String {
         format!(
             "OpenAPI specification version changed from {} to {}.",
@@ -36,27 +39,8 @@ impl OpenAPIVersionChange {
 }
 
 #[derive(Debug)]
-pub enum Change {
-    OpenAPIVersionChange(OpenAPIVersionChange),
-}
-
-impl Change {
-    pub fn message(&self) -> String {
-        match self {
-            Self::OpenAPIVersionChange(c) => c.message(),
-        }
-    }
-}
-
-#[derive(Debug)]
 pub struct Diff {
-    pub changes: Vec<Change>,
-}
-
-impl Diff {
-    pub fn from_changes(changes: Vec<Change>) -> Self {
-        Diff { changes }
-    }
+    version_diff: Option<OpenAPIVersionDiff>,
 }
 
 pub fn diff_json(base: &str, head: &str) -> Result<Diff, DiffError> {
@@ -68,16 +52,19 @@ pub fn diff_json(base: &str, head: &str) -> Result<Diff, DiffError> {
 }
 
 pub fn diff(base: OpenAPI, head: OpenAPI) -> Result<Diff, DiffError> {
-    let mut changes = vec![];
+    let version_diff = diff_versions(base.openapi, head.openapi);
+    Ok(Diff { version_diff })
+}
 
-    if base.openapi != head.openapi {
-        changes.push(Change::OpenAPIVersionChange(OpenAPIVersionChange {
-            from: base.openapi,
-            to: head.openapi,
-        }))
+fn diff_versions(base: String, head: String) -> Option<OpenAPIVersionDiff> {
+    if base != head {
+        Some(OpenAPIVersionDiff {
+            from: base,
+            to: head,
+        })
+    } else {
+        None
     }
-
-    Ok(Diff::from_changes(changes))
 }
 
 #[cfg(test)]
@@ -89,8 +76,7 @@ mod tests {
         let diff = diff_json("fixtures/pet-store.json", "fixtures/pet-store-changed.json")
             .expect("Failed to diff JSON");
 
-        assert_eq!(diff.changes.len(), 1);
-        let version_change = diff.changes.first().unwrap();
+        let version_change = diff.version_diff.unwrap();
 
         assert_eq!(
             "OpenAPI specification version changed from 3.0.0 to 3.1.0.",
@@ -108,8 +94,7 @@ mod tests {
         let result = diff(base, head);
         let diff = result.expect("Failed to diff");
 
-        assert_eq!(diff.changes.len(), 1);
-        let version_change = diff.changes.first().unwrap();
+        let version_change = diff.version_diff.unwrap();
 
         assert_eq!(
             "OpenAPI specification version changed from 3.0.0 to 4.0.0.",
