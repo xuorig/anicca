@@ -39,7 +39,6 @@ Here is the list of OpenAPI objects and properties oaidiff currently compares.
       - [x] Tags Changed 
       - [ ] External Documentation
       - [ ] Parameters
-      - [ ] Parameters
       - [ ] Request Body
       - [ ] Responses
       - [ ] Deprecated

@@ -1,3 +1,6 @@
+use structopt::StructOpt;
+
 fn main() {
-    println!("TODO");
+    let app = heraclitus::cli::Heraclitus::from_args();
+    app.run();
 }

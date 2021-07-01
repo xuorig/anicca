@@ -1,5 +1,5 @@
-use crate::path_items::{PathItemDiff, PathItemPair};
-use crate::DiffError;
+use super::path_items::{PathItemDiff, PathItemPair};
+use super::DiffError;
 use openapiv3::Paths;
 use std::collections::HashMap;
 

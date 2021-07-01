@@ -1,5 +1,5 @@
-use crate::operations::OperationDiff;
-use crate::DiffError;
+use super::operations::OperationDiff;
+use super::DiffError;
 use openapiv3::{Operation, PathItem, ReferenceOr};
 use std::collections::HashMap;
 
