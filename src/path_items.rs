@@ -1,5 +1,7 @@
+use crate::operations::OperationDiff;
 use crate::DiffError;
 use openapiv3::{Operation, PathItem, ReferenceOr};
+use std::collections::HashMap;
 
 pub(crate) type PathItemPair = (String, ReferenceOr<PathItem>);
 
@@ -9,6 +11,7 @@ type OperationMethod = (String, Operation);
 pub(crate) struct PathItemDiff {
     operations_added: Vec<OperationMethod>,
     operations_removed: Vec<OperationMethod>,
+    operations_changed: HashMap<String, OperationDiff>,
 }
 
 impl PathItemDiff {
@@ -23,6 +26,7 @@ impl PathItemDiff {
     ) -> Result<Self, DiffError> {
         let mut operations_added = vec![];
         let mut operations_removed = vec![];
+        let mut operations_changed: HashMap<String, OperationDiff> = HashMap::default();
 
         let base_path_item = match &base {
             ReferenceOr::Item(pi) => pi,
@@ -46,8 +50,12 @@ impl PathItemDiff {
 
         match &base_path_item.get {
             Some(op) => match &head_path_item.get {
-                Some(_head_op) => {
-                    // Diff the get method
+                Some(head_op) => {
+                    let diff = OperationDiff::from_operations(op, head_op);
+
+                    if diff.has_changes() {
+                        operations_changed.insert(String::from("get"), diff);
+                    }
                 }
                 None => {
                     // Removed
@@ -66,6 +74,7 @@ impl PathItemDiff {
         Ok(Self {
             operations_added,
             operations_removed,
+            operations_changed,
         })
     }
 }
