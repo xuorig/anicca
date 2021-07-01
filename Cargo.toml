@@ -1,0 +1,9 @@
+[package]
+name = "heraclitus"
+version = "0.1.0"
+authors = ["xuorig <mgiroux0@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+openapiv3 = "0.4"
+thiserror = "1.0"
