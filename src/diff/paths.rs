@@ -1,9 +1,10 @@
 use super::path_items::{PathItemDiff, PathItemPair};
 use super::DiffError;
 use openapiv3::Paths;
+use serde::Serialize;
 use std::collections::HashMap;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Serialize)]
 pub(crate) struct PathsDiff {
     paths_added: Vec<PathItemPair>,
     paths_removed: Vec<PathItemPair>,

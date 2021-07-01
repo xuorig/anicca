@@ -19,7 +19,9 @@ impl DiffCommand {
 
         match res {
             Ok(diff) => {
-                println!("{:?}", diff)
+                let json =
+                    serde_json::to_string_pretty(&diff).expect("Could not serialize diff to JSON");
+                println!("{}", json)
             }
             Err(e) => {
                 eprintln!("Error: {}", e)

@@ -4,6 +4,7 @@ pub(crate) mod paths;
 
 use openapiv3::OpenAPI;
 use paths::PathsDiff;
+use serde::Serialize;
 use std::path::PathBuf;
 use thiserror::Error;
 
@@ -25,7 +26,7 @@ pub enum DiffError {
 
 /// OpenAPIVersionChange represents a change in the OpenAPI specification version
 /// between documents.
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub struct OpenAPIVersionDiff {
     from: String,
     to: String,
@@ -40,7 +41,7 @@ impl OpenAPIVersionDiff {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub struct Diff {
     version_diff: Option<OpenAPIVersionDiff>,
     paths_diff: PathsDiff,

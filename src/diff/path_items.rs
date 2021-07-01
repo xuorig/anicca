@@ -1,13 +1,14 @@
 use super::operations::OperationDiff;
 use super::DiffError;
 use openapiv3::{Operation, PathItem, ReferenceOr};
+use serde::Serialize;
 use std::collections::HashMap;
 
 pub(crate) type PathItemPair = (String, ReferenceOr<PathItem>);
 
 type OperationMethod = (String, Operation);
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Serialize)]
 pub(crate) struct PathItemDiff {
     operations_added: Vec<OperationMethod>,
     operations_removed: Vec<OperationMethod>,

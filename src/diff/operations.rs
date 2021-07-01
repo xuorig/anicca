@@ -1,7 +1,8 @@
 use openapiv3::Operation;
+use serde::Serialize;
 use std::collections::HashSet;
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub(crate) struct OperationDiff {
     tags_diff: TagsDiff,
     summary_diff: Option<OptionalStringDiff>,
@@ -32,7 +33,7 @@ impl OperationDiff {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub struct OptionalStringDiff {
     pub from: Option<String>,
     pub to: Option<String>,
@@ -51,7 +52,7 @@ impl OptionalStringDiff {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub(crate) struct TagsDiff {
     pub added: Vec<String>,
     pub removed: Vec<String>,
