@@ -2,16 +2,16 @@ pub(crate) mod operations;
 pub(crate) mod paths;
 
 use openapiv3::OpenAPI;
-use paths::{diff_paths, PathsDiff};
+use paths::PathsDiff;
 use serde_json;
 use thiserror::Error;
 
 /// DiffError enumerates all possible errors returned by this library.
 #[derive(Error, Debug)]
 pub enum DiffError {
-    /// Represents an invalid OpenAPI document according to the specification.
-    #[error("Invalid OpenAPI document")]
-    InvalidOpenAPI,
+    /// Represents an unsupported feature by this library.
+    #[error("Unsupported feature: {0}")]
+    UnsupportedFeature(String),
 
     /// Represents all cases of `std::io::Error`.
     #[error(transparent)]
@@ -55,7 +55,7 @@ pub fn diff_json(base: &str, head: &str) -> Result<Diff, DiffError> {
 
 pub fn diff(base: OpenAPI, head: OpenAPI) -> Result<Diff, DiffError> {
     let version_diff = diff_versions(base.openapi, head.openapi);
-    let paths_diff = diff_paths(&base.paths, &head.paths)?;
+    let paths_diff = PathsDiff::from_paths(&base.paths, &head.paths)?;
     Ok(Diff {
         version_diff,
         paths_diff,
