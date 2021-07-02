@@ -5,12 +5,12 @@ use serde::Serialize;
 use std::collections::HashSet;
 
 #[derive(Debug, Serialize)]
-pub(crate) struct OperationDiff {
-    tags: TagsDiff,
-    summary: Option<OptionalStringDiff>,
-    description: Option<OptionalStringDiff>,
-    operation_id: Option<OptionalStringDiff>,
-    parameters: ParametersDiff,
+pub struct OperationDiff {
+    pub tags: TagsDiff,
+    pub summary: Option<OptionalStringDiff>,
+    pub description: Option<OptionalStringDiff>,
+    pub operation_id: Option<OptionalStringDiff>,
+    pub parameters: ParametersDiff,
 }
 
 impl OperationDiff {
@@ -42,7 +42,7 @@ impl OperationDiff {
 }
 
 #[derive(Debug, Serialize)]
-pub(crate) struct TagsDiff {
+pub struct TagsDiff {
     pub added: Vec<String>,
     pub removed: Vec<String>,
 }

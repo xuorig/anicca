@@ -4,7 +4,7 @@ use serde::Serialize;
 use std::collections::HashMap;
 
 #[derive(Debug, Serialize)]
-pub(crate) struct ParametersDiff {
+pub struct ParametersDiff {
     added: Vec<ReferenceOr<Parameter>>,
     removed: Vec<ReferenceOr<Parameter>>,
     changed: HashMap<String, ParameterDiff>,

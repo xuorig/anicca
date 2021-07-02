@@ -3,7 +3,7 @@ use openapiv3::{Parameter, ParameterData};
 use serde::Serialize;
 
 #[derive(Debug, Serialize)]
-pub(crate) struct ParameterDiff {
+pub struct ParameterDiff {
     required: Option<BooleanDiff>,
     #[serde(rename = "in")]
     in_change: Option<StringDiff>,

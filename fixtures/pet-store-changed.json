@@ -17,6 +17,7 @@
       "get": {
         "summary": "List all dogs",
         "operationId": "listDogs",
+        "tags": ["felines"],
         "parameters": [
           {
             "name": "username",
@@ -47,15 +48,51 @@
             }
           }
         }
-      },
-      "components": {
-        "schemas": {
-          "Dogs": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Dog"
+      }
+    },
+    "/pets2": {
+      "get": {
+        "summary": "List all dogs",
+        "operationId": "listDogs",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "stays",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "A paged array of dogs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Dogs"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Dogs": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Dog"
         }
       }
     }

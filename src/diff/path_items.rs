@@ -4,15 +4,15 @@ use openapiv3::{Operation, PathItem, ReferenceOr};
 use serde::Serialize;
 use std::collections::HashMap;
 
-pub(crate) type PathItemPair = (String, ReferenceOr<PathItem>);
+pub type PathItemPair = (String, ReferenceOr<PathItem>);
 
-type OperationMethod = (String, Operation);
+pub type OperationMethod = (String, Operation);
 
 #[derive(Debug, Default, Serialize)]
-pub(crate) struct PathItemDiff {
-    operations_added: Vec<OperationMethod>,
-    operations_removed: Vec<OperationMethod>,
-    operations_changed: HashMap<String, OperationDiff>,
+pub struct PathItemDiff {
+    pub operations_added: Vec<OperationMethod>,
+    pub operations_removed: Vec<OperationMethod>,
+    pub operations_changed: HashMap<String, OperationDiff>,
 }
 
 impl PathItemDiff {

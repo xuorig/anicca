@@ -5,10 +5,10 @@ use serde::Serialize;
 use std::collections::HashMap;
 
 #[derive(Debug, Default, Serialize)]
-pub(crate) struct PathsDiff {
-    added: Vec<PathItemPair>,
-    removed: Vec<PathItemPair>,
-    changed: HashMap<String, PathItemDiff>,
+pub struct PathsDiff {
+    pub added: Vec<PathItemPair>,
+    pub removed: Vec<PathItemPair>,
+    pub changed: HashMap<String, PathItemDiff>,
 }
 
 impl PathsDiff {

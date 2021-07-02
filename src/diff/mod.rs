@@ -30,9 +30,8 @@ pub enum DiffError {
 
 #[derive(Debug, Serialize)]
 pub struct Diff {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    version: Option<StringDiff>,
-    paths: PathsDiff,
+    pub version: Option<StringDiff>,
+    pub paths: PathsDiff,
 }
 
 pub fn diff_json(base: PathBuf, head: PathBuf) -> Result<Diff, DiffError> {

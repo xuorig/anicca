@@ -1,3 +1,4 @@
+use super::markdown::Printer;
 use crate::diff::diff_json;
 use clap::arg_enum;
 use std::path::PathBuf;
@@ -44,9 +45,8 @@ impl DiffCommand {
                     println!("{}", yaml);
                 }
                 Format::Default => {
-                    let json = serde_json::to_string_pretty(&diff)
-                        .expect("Could not serialize diff to JSON");
-                    println!("{}", json);
+                    let md = Printer::print(&diff);
+                    println!("{}", md);
                 }
             },
             Err(e) => {
