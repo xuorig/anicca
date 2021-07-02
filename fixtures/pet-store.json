@@ -34,7 +34,6 @@
               "type": "string"
             }
           }
-
         ],
         "responses": {
           "200": {
@@ -42,23 +41,23 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Pets"
+                  "type": "string"
                 }
               }
             }
           }
         }
-      } 
+      }
     }
   },
-      "components": {
-        "schemas": {
-          "Pets": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Pet"
-            }
-          }
+  "components": {
+    "schemas": {
+      "Pets": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Pet"
         }
       }
+    }
+  }
 }

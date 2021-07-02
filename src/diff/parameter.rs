@@ -1,5 +1,6 @@
 use super::common::{BooleanDiff, StringDiff};
-use openapiv3::{Parameter, ParameterData};
+use super::schema::SchemaDiff;
+use openapiv3::{Parameter, ParameterData, ParameterSchemaOrContent};
 use serde::Serialize;
 
 #[derive(Debug, Serialize)]
@@ -7,6 +8,7 @@ pub struct ParameterDiff {
     required: Option<BooleanDiff>,
     #[serde(rename = "in")]
     in_change: Option<StringDiff>,
+    schema: Option<SchemaDiff>,
 }
 
 impl ParameterDiff {
@@ -19,6 +21,23 @@ impl ParameterDiff {
         let base_parameter_data = Self::parameter_data(base);
         let head_parameter_data = Self::parameter_data(head);
 
+        let schema_diff =
+            if let ParameterSchemaOrContent::Schema(base_schema) = &base_parameter_data.format {
+                if let ParameterSchemaOrContent::Schema(head_schema) = &head_parameter_data.format {
+                    let diff = SchemaDiff::from_schemas(&base_schema, &head_schema);
+
+                    if diff.has_changes() {
+                        Some(diff)
+                    } else {
+                        None
+                    }
+                } else {
+                    panic!("Parameter content is not supported yet")
+                }
+            } else {
+                panic!("Parameter content is not supported yet")
+            };
+
         Self {
             required: BooleanDiff::from_bools(
                 base_parameter_data.required,
@@ -28,6 +47,7 @@ impl ParameterDiff {
                 Self::parameter_type(base),
                 Self::parameter_type(head),
             ),
+            schema: schema_diff,
         }
     }
 

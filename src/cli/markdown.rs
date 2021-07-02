@@ -27,7 +27,62 @@ impl Printer {
         result.push_str("### Added\n\n");
 
         for added in &diff.paths.added {
-            result.push_str(format!("  - {}\n", added.0).as_str());
+            if let ReferenceOr::Item(path_item) = &added.1 {
+                if let Some(get) = &path_item.get {
+                    result.push_str(
+                        format!(
+                            "  - {} {} ({})\n",
+                            "GET",
+                            added.0,
+                            get.operation_id.clone().unwrap_or("No operation id".into())
+                        )
+                        .as_str(),
+                    );
+                }
+
+                if let Some(post) = &path_item.post {
+                    result.push_str(
+                        format!(
+                            "  - {} {} ({})\n",
+                            "POST",
+                            added.0,
+                            post.operation_id
+                                .clone()
+                                .unwrap_or("No operation id".into())
+                        )
+                        .as_str(),
+                    );
+                }
+
+                if let Some(put) = &path_item.put {
+                    result.push_str(
+                        format!(
+                            "  - {} {} ({})\n",
+                            "PUT",
+                            added.0,
+                            put.operation_id.clone().unwrap_or("No operation id".into())
+                        )
+                        .as_str(),
+                    );
+                }
+
+                if let Some(patch) = &path_item.patch {
+                    result.push_str(
+                        format!(
+                            "  - {} {} ({})\n",
+                            "PATCH",
+                            added.0,
+                            patch
+                                .operation_id
+                                .clone()
+                                .unwrap_or(String::from("No operation id"))
+                        )
+                        .as_str(),
+                    );
+                }
+            } else {
+                result.push_str(format!("  - {}\n", added.0).as_str());
+            }
         }
 
         result.push_str("\n");
@@ -141,13 +196,7 @@ impl Printer {
                 if let Some(diff) = &operation_diff.description {
                     if let Some(from) = &diff.from {
                         if let Some(to) = &diff.to {
-                            result.push_str(
-                                format!(
-                                    "  - Operation description changed from `{}` to `{}.`\n",
-                                    from, to
-                                )
-                                .as_str(),
-                            );
+                            result.push_str("  - Operation description was changed.\n");
                         } else {
                             result.push_str("  - Operation description was removed.\n");
                         }

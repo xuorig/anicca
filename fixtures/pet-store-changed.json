@@ -32,7 +32,7 @@
             "in": "query",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           }
         ],
@@ -42,7 +42,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Dogs"
+                  "type": "integer"
                 }
               }
             }
