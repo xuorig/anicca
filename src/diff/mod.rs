@@ -1,4 +1,5 @@
 pub(crate) mod operations;
+pub(crate) mod parameters;
 pub(crate) mod path_items;
 pub(crate) mod paths;
 
@@ -43,8 +44,9 @@ impl OpenAPIVersionDiff {
 
 #[derive(Debug, Serialize)]
 pub struct Diff {
-    version_diff: Option<OpenAPIVersionDiff>,
-    paths_diff: PathsDiff,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    spec_version_changed: Option<OpenAPIVersionDiff>,
+    paths: PathsDiff,
 }
 
 pub fn diff_json(base: PathBuf, head: PathBuf) -> Result<Diff, DiffError> {
@@ -59,8 +61,8 @@ pub fn diff(base: OpenAPI, head: OpenAPI) -> Result<Diff, DiffError> {
     let version_diff = diff_versions(base.openapi, head.openapi);
     let paths_diff = PathsDiff::from_paths(&base.paths, &head.paths)?;
     Ok(Diff {
-        version_diff,
-        paths_diff,
+        spec_version_changed: version_diff,
+        paths: paths_diff,
     })
 }
 
@@ -87,7 +89,7 @@ mod tests {
         )
         .expect("Failed to diff JSON");
 
-        let version_change = diff.version_diff.unwrap();
+        let version_change = diff.spec_version_changed.unwrap();
 
         assert_eq!(
             "OpenAPI specification version changed from 3.0.0 to 3.1.0.",
@@ -105,7 +107,7 @@ mod tests {
         let result = diff(base, head);
         let diff = result.expect("Failed to diff");
 
-        let version_change = diff.version_diff.unwrap();
+        let version_change = diff.spec_version_changed.unwrap();
 
         assert_eq!(
             "OpenAPI specification version changed from 3.0.0 to 4.0.0.",

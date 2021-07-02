@@ -6,9 +6,9 @@ use std::collections::HashMap;
 
 #[derive(Debug, Default, Serialize)]
 pub(crate) struct PathsDiff {
-    paths_added: Vec<PathItemPair>,
-    paths_removed: Vec<PathItemPair>,
-    paths_changed: HashMap<String, PathItemDiff>,
+    added: Vec<PathItemPair>,
+    removed: Vec<PathItemPair>,
+    changed: HashMap<String, PathItemDiff>,
 }
 
 impl PathsDiff {
@@ -39,9 +39,9 @@ impl PathsDiff {
         }
 
         Ok(PathsDiff {
-            paths_added,
-            paths_removed,
-            paths_changed,
+            added: paths_added,
+            removed: paths_removed,
+            changed: paths_changed,
         })
     }
 }
@@ -59,8 +59,8 @@ mod tests {
 
         let diff = PathsDiff::from_paths(&base, &head).expect("Failed to diff paths");
 
-        assert_eq!(diff.paths_added.len(), 1);
-        assert_eq!(diff.paths_added.first().unwrap().0, "/cats");
+        assert_eq!(diff.added.len(), 1);
+        assert_eq!(diff.added.first().unwrap().0, "/cats");
     }
 
     #[test]
@@ -71,8 +71,8 @@ mod tests {
 
         let diff = PathsDiff::from_paths(&base, &head).expect("Failed to diff paths");
 
-        assert_eq!(diff.paths_added.len(), 0);
-        assert_eq!(diff.paths_removed.len(), 1);
-        assert_eq!(diff.paths_removed.first().unwrap().0, "/cats");
+        assert_eq!(diff.added.len(), 0);
+        assert_eq!(diff.removed.len(), 1);
+        assert_eq!(diff.removed.first().unwrap().0, "/cats");
     }
 }

@@ -17,7 +17,9 @@ pub(crate) struct PathItemDiff {
 
 impl PathItemDiff {
     pub fn has_change(&self) -> bool {
-        !self.operations_removed.is_empty() || !self.operations_added.is_empty()
+        !self.operations_removed.is_empty()
+            || !self.operations_added.is_empty()
+            || !self.operations_changed.is_empty()
     }
 
     /// Diffs two sets of OpenAPI paths

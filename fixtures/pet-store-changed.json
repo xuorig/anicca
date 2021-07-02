@@ -13,10 +13,20 @@
     }
   ],
   "paths": {
-    "/dogs": {
+    "/pets": {
       "get": {
         "summary": "List all dogs",
         "operationId": "listDogs",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "A paged array of dogs",

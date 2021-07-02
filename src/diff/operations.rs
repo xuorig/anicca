@@ -1,3 +1,4 @@
+use super::parameters::ParametersDiff;
 use openapiv3::Operation;
 use serde::Serialize;
 use std::collections::HashSet;
@@ -5,14 +6,21 @@ use std::collections::HashSet;
 #[derive(Debug, Serialize)]
 pub(crate) struct OperationDiff {
     tags_diff: TagsDiff,
+    #[serde(skip_serializing_if = "Option::is_none")]
     summary_diff: Option<OptionalStringDiff>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     description_diff: Option<OptionalStringDiff>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     operation_id_diff: Option<OptionalStringDiff>,
+    parameters: ParametersDiff,
 }
 
 impl OperationDiff {
     pub fn has_changes(&self) -> bool {
-        false
+        self.tags_diff.has_changes()
+            || self.summary_diff.is_some()
+            || self.description_diff.is_some()
+            || self.operation_id_diff.is_some()
     }
 
     pub fn from_operations(base: &Operation, head: &Operation) -> Self {
@@ -23,12 +31,14 @@ impl OperationDiff {
             OptionalStringDiff::from_strings(base.description.clone(), head.description.clone());
         let operation_id_diff =
             OptionalStringDiff::from_strings(base.operation_id.clone(), head.operation_id.clone());
+        let parameters = ParametersDiff::from_params(&base.parameters, &head.parameters);
 
         Self {
             tags_diff,
             summary_diff,
             description_diff,
             operation_id_diff,
+            parameters,
         }
     }
 }
@@ -74,6 +84,10 @@ impl TagsDiff {
             .collect();
 
         Self { added, removed }
+    }
+
+    pub fn has_changes(&self) -> bool {
+        !self.added.is_empty() || !self.removed.is_empty()
     }
 }
 
