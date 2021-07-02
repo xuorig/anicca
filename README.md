@@ -6,11 +6,11 @@ Get the difference between two OpenAPI descriptions.
 
 ## CLI
 
-TODO
+```shell
+$ cargo run --bin cli diff --base-file fixtures/pet-store.json --head-file fixtures/pet-store-changed.json --format json
+```
 
 ## Library
-
-TODO
 
 ## Diffs
 
