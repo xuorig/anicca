@@ -1,3 +1,4 @@
+use super::common::OptionalStringDiff;
 use super::parameters::ParametersDiff;
 use openapiv3::Operation;
 use serde::Serialize;
@@ -5,22 +6,19 @@ use std::collections::HashSet;
 
 #[derive(Debug, Serialize)]
 pub(crate) struct OperationDiff {
-    tags_diff: TagsDiff,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    summary_diff: Option<OptionalStringDiff>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    description_diff: Option<OptionalStringDiff>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    operation_id_diff: Option<OptionalStringDiff>,
+    tags: TagsDiff,
+    summary: Option<OptionalStringDiff>,
+    description: Option<OptionalStringDiff>,
+    operation_id: Option<OptionalStringDiff>,
     parameters: ParametersDiff,
 }
 
 impl OperationDiff {
     pub fn has_changes(&self) -> bool {
-        self.tags_diff.has_changes()
-            || self.summary_diff.is_some()
-            || self.description_diff.is_some()
-            || self.operation_id_diff.is_some()
+        self.tags.has_changes()
+            || self.summary.is_some()
+            || self.description.is_some()
+            || self.operation_id.is_some()
     }
 
     pub fn from_operations(base: &Operation, head: &Operation) -> Self {
@@ -34,30 +32,11 @@ impl OperationDiff {
         let parameters = ParametersDiff::from_params(&base.parameters, &head.parameters);
 
         Self {
-            tags_diff,
-            summary_diff,
-            description_diff,
-            operation_id_diff,
+            tags: tags_diff,
+            summary: summary_diff,
+            description: description_diff,
+            operation_id: operation_id_diff,
             parameters,
-        }
-    }
-}
-
-#[derive(Debug, Serialize)]
-pub struct OptionalStringDiff {
-    pub from: Option<String>,
-    pub to: Option<String>,
-}
-
-impl OptionalStringDiff {
-    pub fn from_strings(base: Option<String>, head: Option<String>) -> Option<Self> {
-        if base != head {
-            Some(Self {
-                from: base,
-                to: head,
-            })
-        } else {
-            None
         }
     }
 }
@@ -102,7 +81,7 @@ mod tests {
         head_operation.operation_id = Some("cats/create".into());
 
         let diff = OperationDiff::from_operations(&base_operation, &head_operation);
-        let op_id_diff = diff.operation_id_diff.unwrap();
+        let op_id_diff = diff.operation_id.unwrap();
 
         assert_eq!(op_id_diff.from, None);
         assert_eq!(op_id_diff.to, Some("cats/create".into()));
@@ -116,7 +95,7 @@ mod tests {
         head_operation.operation_id = Some("cats/create".into());
 
         let diff = OperationDiff::from_operations(&base_operation, &head_operation);
-        let op_id_diff = diff.operation_id_diff.unwrap();
+        let op_id_diff = diff.operation_id.unwrap();
 
         assert_eq!(op_id_diff.from, Some("cats-create".into()));
         assert_eq!(op_id_diff.to, Some("cats/create".into()));
@@ -129,7 +108,7 @@ mod tests {
         head_operation.summary = Some("Creates a feline.".into());
 
         let diff = OperationDiff::from_operations(&base_operation, &head_operation);
-        let summary_diff = diff.summary_diff.unwrap();
+        let summary_diff = diff.summary.unwrap();
 
         assert_eq!(summary_diff.from, None);
         assert_eq!(summary_diff.to, Some("Creates a feline.".into()));
@@ -143,7 +122,7 @@ mod tests {
         head_operation.summary = Some("Creates a feline.".into());
 
         let diff = OperationDiff::from_operations(&base_operation, &head_operation);
-        let summary_diff = diff.summary_diff.unwrap();
+        let summary_diff = diff.summary.unwrap();
 
         assert_eq!(summary_diff.from, Some("Creates a cat.".into()));
         assert_eq!(summary_diff.to, Some("Creates a feline.".into()));
@@ -156,7 +135,7 @@ mod tests {
         head_operation.description = Some("Creates a feline.".into());
 
         let diff = OperationDiff::from_operations(&base_operation, &head_operation);
-        let description_diff = diff.description_diff.unwrap();
+        let description_diff = diff.description.unwrap();
 
         assert_eq!(description_diff.from, None);
         assert_eq!(description_diff.to, Some("Creates a feline.".into()));
@@ -170,7 +149,7 @@ mod tests {
         head_operation.description = Some("Creates a feline.".into());
 
         let diff = OperationDiff::from_operations(&base_operation, &head_operation);
-        let description_diff = diff.description_diff.unwrap();
+        let description_diff = diff.description.unwrap();
 
         assert_eq!(description_diff.from, Some("Creates a cat.".into()));
         assert_eq!(description_diff.to, Some("Creates a feline.".into()));
@@ -188,7 +167,7 @@ mod tests {
 
         let diff = OperationDiff::from_operations(&base_operation, &head_operation);
 
-        assert_eq!(vec!["Fish"], diff.tags_diff.added);
-        assert_eq!(vec!["Dogs"], diff.tags_diff.removed);
+        assert_eq!(vec!["Fish"], diff.tags.added);
+        assert_eq!(vec!["Dogs"], diff.tags.removed);
     }
 }

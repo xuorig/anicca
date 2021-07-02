@@ -1,19 +1,16 @@
+use super::parameter::ParameterDiff;
 use openapiv3::{Parameter, ReferenceOr};
 use serde::Serialize;
+use std::collections::HashMap;
 
 #[derive(Debug, Serialize)]
 pub(crate) struct ParametersDiff {
-    #[serde(skip_serializing_if = "Vec::is_empty")]
     added: Vec<ReferenceOr<Parameter>>,
-    #[serde(skip_serializing_if = "Vec::is_empty")]
     removed: Vec<ReferenceOr<Parameter>>,
+    changed: HashMap<String, ParameterDiff>,
 }
 
 impl ParametersDiff {
-    pub fn has_changes(&self) -> bool {
-        !self.added.is_empty() || !self.removed.is_empty()
-    }
-
     pub fn param_name(param: &Parameter) -> String {
         match param {
             Parameter::Query {
@@ -43,6 +40,7 @@ impl ParametersDiff {
     ) -> Self {
         let mut added = vec![];
         let mut removed = vec![];
+        let mut changed: HashMap<String, ParameterDiff> = HashMap::default();
 
         for ref_or_param in base {
             match ref_or_param {
@@ -54,12 +52,9 @@ impl ParametersDiff {
 
                     match ref_match {
                         Some(_param) => {
-                            // Do the diff
+                            panic!("Comparing changed parameter refs is not implemented yet");
                         }
-                        None => {
-                            // Removed
-                            removed.push(ref_or_param.clone())
-                        }
+                        None => removed.push(ref_or_param.clone()),
                     }
                 }
                 ReferenceOr::Item(param) => {
@@ -69,13 +64,16 @@ impl ParametersDiff {
                     });
 
                     match param_match {
-                        Some(_param) => {
-                            // Do the diff
+                        Some(head_param) => {
+                            if let ReferenceOr::Item(head_param) = head_param {
+                                let diff = ParameterDiff::from_params(param, head_param);
+
+                                if diff.has_changes() {
+                                    changed.insert(Self::param_name(param), diff);
+                                }
+                            }
                         }
-                        None => {
-                            // Removed
-                            removed.push(ref_or_param.clone())
-                        }
+                        None => removed.push(ref_or_param.clone()),
                     }
                 }
             }
@@ -91,10 +89,7 @@ impl ParametersDiff {
 
                     match ref_match {
                         Some(_param) => {}
-                        None => {
-                            // added
-                            added.push(ref_or_param.clone())
-                        }
+                        None => added.push(ref_or_param.clone()),
                     }
                 }
                 ReferenceOr::Item(param) => {
@@ -105,16 +100,17 @@ impl ParametersDiff {
 
                     match param_match {
                         Some(_param) => {}
-                        None => {
-                            // Added
-                            added.push(ref_or_param.clone())
-                        }
+                        None => added.push(ref_or_param.clone()),
                     }
                 }
             }
         }
 
-        Self { added, removed }
+        Self {
+            added,
+            removed,
+            changed,
+        }
     }
 }
 
