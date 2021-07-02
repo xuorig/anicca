@@ -5,9 +5,9 @@ use std::collections::HashMap;
 
 #[derive(Debug, Serialize)]
 pub struct ParametersDiff {
-    added: Vec<ReferenceOr<Parameter>>,
-    removed: Vec<ReferenceOr<Parameter>>,
-    changed: HashMap<String, ParameterDiff>,
+    pub added: Vec<ReferenceOr<Parameter>>,
+    pub removed: Vec<ReferenceOr<Parameter>>,
+    pub changed: HashMap<String, ParameterDiff>,
 }
 
 impl ParametersDiff {

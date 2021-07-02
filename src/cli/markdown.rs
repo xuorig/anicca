@@ -1,4 +1,5 @@
 use crate::diff::Diff;
+use openapiv3::{Parameter, ReferenceOr};
 
 pub struct Printer {}
 
@@ -120,7 +121,7 @@ impl Printer {
                         if let Some(to) = &summary_diff.to {
                             result.push_str(
                                 format!(
-                                    "  - Operation summary changed from `{}` to `{}`\n",
+                                    "  - Operation summary changed from `{}` to `{}`.\n",
                                     from, to
                                 )
                                 .as_str(),
@@ -142,7 +143,7 @@ impl Printer {
                         if let Some(to) = &diff.to {
                             result.push_str(
                                 format!(
-                                    "  - Operation description changed from `{}` to `{}`\n",
+                                    "  - Operation description changed from `{}` to `{}.`\n",
                                     from, to
                                 )
                                 .as_str(),
@@ -173,6 +174,120 @@ impl Printer {
                         if let Some(to) = &diff.to {
                             result.push_str(format!("  - Operation id added: `{}`\n", to).as_str());
                         }
+                    }
+                }
+
+                for param in &operation_diff.parameters.added {
+                    match param {
+                        ReferenceOr::Reference { reference } => {
+                            result.push_str(
+                                format!("  - Referenced parameter `{}` was added.\n", reference)
+                                    .as_str(),
+                            );
+                        }
+                        ReferenceOr::Item(param) => match param {
+                            Parameter::Query {
+                                parameter_data,
+                                allow_reserved: _,
+                                style: _,
+                                allow_empty_value: _,
+                            } => {
+                                result.push_str(
+                                    format!(
+                                        "  - Query parameter `{}` was added.\n",
+                                        parameter_data.name
+                                    )
+                                    .as_str(),
+                                );
+                            }
+                            Parameter::Header {
+                                parameter_data,
+                                style: _,
+                            } => {
+                                result.push_str(
+                                    format!("  - Header `{}` was added.\n", parameter_data.name)
+                                        .as_str(),
+                                );
+                            }
+                            Parameter::Path {
+                                parameter_data,
+                                style: _,
+                            } => {
+                                result.push_str(
+                                    format!(
+                                        "  - Path parameter `{}` was added.\n",
+                                        parameter_data.name
+                                    )
+                                    .as_str(),
+                                );
+                            }
+                            Parameter::Cookie {
+                                parameter_data,
+                                style: _,
+                            } => {
+                                result.push_str(
+                                    format!("  - Cookie `{}` was added.\n", parameter_data.name)
+                                        .as_str(),
+                                );
+                            }
+                        },
+                    }
+                }
+
+                for param in &operation_diff.parameters.removed {
+                    match param {
+                        ReferenceOr::Reference { reference } => {
+                            result.push_str(
+                                format!("  - Referenced parameter `{}` was removed.\n", reference)
+                                    .as_str(),
+                            );
+                        }
+                        ReferenceOr::Item(param) => match param {
+                            Parameter::Query {
+                                parameter_data,
+                                allow_reserved: _,
+                                style: _,
+                                allow_empty_value: _,
+                            } => {
+                                result.push_str(
+                                    format!(
+                                        "  - Query parameter `{}` was removed.\n",
+                                        parameter_data.name
+                                    )
+                                    .as_str(),
+                                );
+                            }
+                            Parameter::Header {
+                                parameter_data,
+                                style: _,
+                            } => {
+                                result.push_str(
+                                    format!("  - Header `{}` was removed.\n", parameter_data.name)
+                                        .as_str(),
+                                );
+                            }
+                            Parameter::Path {
+                                parameter_data,
+                                style: _,
+                            } => {
+                                result.push_str(
+                                    format!(
+                                        "  - Path parameter `{}` was removed.\n",
+                                        parameter_data.name
+                                    )
+                                    .as_str(),
+                                );
+                            }
+                            Parameter::Cookie {
+                                parameter_data,
+                                style: _,
+                            } => {
+                                result.push_str(
+                                    format!("  - Cookie `{}` was removed.\n", parameter_data.name)
+                                        .as_str(),
+                                );
+                            }
+                        },
                     }
                 }
             }
