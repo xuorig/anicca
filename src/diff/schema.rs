@@ -12,8 +12,10 @@ pub struct SchemaDiff {
 
 impl SchemaDiff {
     pub fn has_changes(&self) -> bool {
-        // TODO
-        true
+        self.type_changed.is_some()
+            || self.schema_kind_changed.is_some()
+            || !self.properties_added.is_empty()
+            || !self.properties_removed.is_empty()
     }
 
     pub fn from_schemas(base: &ReferenceOr<Schema>, head: &ReferenceOr<Schema>) -> Self {
