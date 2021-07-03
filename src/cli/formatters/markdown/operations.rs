@@ -1,5 +1,6 @@
 use super::parameters::ParametersPrinter;
 use super::request_body::RequestBodyPrinter;
+use super::responses::ResponsesPrinter;
 use crate::diff::operations::OperationDiff;
 
 pub struct OperationsPrinter<'a> {
@@ -96,6 +97,13 @@ impl<'a> OperationsPrinter<'a> {
 
             result.push_str(&request_body);
         }
+
+        let params = ResponsesPrinter {
+            responses: &self.operation_diff.responses,
+        }
+        .print();
+
+        result.push_str(&params);
 
         result
     }
