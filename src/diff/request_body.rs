@@ -11,7 +11,7 @@ pub struct RequestBodyDiff {
 
 impl RequestBodyDiff {
     pub fn has_changes(&self) -> bool {
-        true
+        self.added.is_some() || self.removed.is_some() || self.content_changed.is_some()
     }
 
     pub fn from_request_bodies(

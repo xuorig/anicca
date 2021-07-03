@@ -15,7 +15,7 @@ pub struct ContentDiff {
 
 impl ContentDiff {
     pub fn has_changes(&self) -> bool {
-        true
+        !self.added.is_empty() || !self.removed.is_empty() || !self.changed.is_empty()
     }
 
     pub fn from_content(
