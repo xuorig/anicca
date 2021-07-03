@@ -1,4 +1,4 @@
-use super::markdown::Printer;
+use super::formatters::markdown::Printer;
 use crate::diff::diff_json;
 use clap::arg_enum;
 use std::path::PathBuf;

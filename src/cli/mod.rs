@@ -1,6 +1,6 @@
 pub(crate) mod diff;
 pub(crate) mod docs;
-pub(crate) mod markdown;
+pub(crate) mod formatters;
 
 use structopt::StructOpt;
 
