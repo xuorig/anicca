@@ -4,9 +4,9 @@ use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct RequestBodyDiff {
-    added: Option<ReferenceOr<RequestBody>>,
-    removed: Option<ReferenceOr<RequestBody>>,
-    content_changed: Option<ContentDiff>,
+    pub added: Option<ReferenceOr<RequestBody>>,
+    pub removed: Option<ReferenceOr<RequestBody>>,
+    pub content_changed: Option<ContentDiff>,
 }
 
 impl RequestBodyDiff {

@@ -4,9 +4,9 @@ use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct MediaTypeDiff {
-    schema_changed: Option<SchemaDiff>,
-    schema_added: Option<ReferenceOr<Schema>>,
-    schema_removed: Option<ReferenceOr<Schema>>,
+    pub schema_changed: Option<SchemaDiff>,
+    pub schema_added: Option<ReferenceOr<Schema>>,
+    pub schema_removed: Option<ReferenceOr<Schema>>,
 }
 
 impl MediaTypeDiff {

@@ -8,9 +8,9 @@ pub type MediaTypePair = (String, MediaType);
 
 #[derive(Debug, Serialize)]
 pub struct ContentDiff {
-    added: Vec<MediaTypePair>,
-    removed: Vec<MediaTypePair>,
-    changed: HashMap<String, MediaTypeDiff>,
+    pub added: Vec<MediaTypePair>,
+    pub removed: Vec<MediaTypePair>,
+    pub changed: HashMap<String, MediaTypeDiff>,
 }
 
 impl ContentDiff {
