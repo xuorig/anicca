@@ -1,6 +1,8 @@
 pub mod meta;
 pub mod operations;
+pub mod parameters;
 pub mod paths;
+pub mod request_body;
 
 use crate::diff::Diff;
 use meta::MetaPrinter;
