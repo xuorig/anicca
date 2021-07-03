@@ -4,10 +4,10 @@ use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct SchemaDiff {
-    type_changed: Option<StringDiff>,
-    schema_kind_changed: Option<StringDiff>,
-    properties_added: Vec<String>,
-    properties_removed: Vec<String>,
+    pub type_changed: Option<StringDiff>,
+    pub schema_kind_changed: Option<StringDiff>,
+    pub properties_added: Vec<String>,
+    pub properties_removed: Vec<String>,
 }
 
 impl SchemaDiff {
