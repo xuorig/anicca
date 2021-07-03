@@ -1,9 +1,12 @@
 pub(crate) mod common;
+pub(crate) mod content;
+pub(crate) mod media_type;
 pub(crate) mod operations;
 pub(crate) mod parameter;
 pub(crate) mod parameters;
 pub(crate) mod path_items;
 pub(crate) mod paths;
+pub(crate) mod request_body;
 pub(crate) mod schema;
 
 use common::StringDiff;

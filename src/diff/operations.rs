@@ -1,5 +1,6 @@
 use super::common::OptionalStringDiff;
 use super::parameters::ParametersDiff;
+use super::request_body::RequestBodyDiff;
 use openapiv3::Operation;
 use serde::Serialize;
 use std::collections::HashSet;
@@ -11,6 +12,7 @@ pub struct OperationDiff {
     pub description: Option<OptionalStringDiff>,
     pub operation_id: Option<OptionalStringDiff>,
     pub parameters: ParametersDiff,
+    pub request_body: Option<RequestBodyDiff>,
 }
 
 impl OperationDiff {
@@ -23,13 +25,26 @@ impl OperationDiff {
 
     pub fn from_operations(base: &Operation, head: &Operation) -> Self {
         let tags_diff = TagsDiff::from_tags(&base.tags, &head.tags);
+
         let summary_diff =
             OptionalStringDiff::from_strings(base.summary.clone(), head.summary.clone());
+
         let description_diff =
             OptionalStringDiff::from_strings(base.description.clone(), head.description.clone());
+
         let operation_id_diff =
             OptionalStringDiff::from_strings(base.operation_id.clone(), head.operation_id.clone());
+
         let parameters = ParametersDiff::from_params(&base.parameters, &head.parameters);
+
+        let request_body_diff =
+            RequestBodyDiff::from_request_bodies(&base.request_body, &head.request_body);
+
+        let request_body = if request_body_diff.has_changes() {
+            Some(request_body_diff)
+        } else {
+            None
+        };
 
         Self {
             tags: tags_diff,
@@ -37,6 +52,7 @@ impl OperationDiff {
             description: description_diff,
             operation_id: operation_id_diff,
             parameters,
+            request_body,
         }
     }
 }
@@ -55,6 +71,7 @@ impl TagsDiff {
             .filter(|item| !base_set.contains(item))
             .map(|item| item.clone())
             .collect();
+
         let head_set: HashSet<_> = head.iter().collect();
         let removed: Vec<_> = base
             .iter()
