@@ -13,8 +13,7 @@ pub struct ParameterDiff {
 
 impl ParameterDiff {
     pub fn has_changes(&self) -> bool {
-        // TODO
-        true
+        self.required.is_some() || self.in_change.is_some() || self.schema.is_some()
     }
 
     pub fn from_params(base: &Parameter, head: &Parameter) -> Self {

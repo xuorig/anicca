@@ -7,6 +7,8 @@ pub(crate) mod parameters;
 pub(crate) mod path_items;
 pub(crate) mod paths;
 pub(crate) mod request_body;
+pub(crate) mod response;
+pub(crate) mod responses;
 pub(crate) mod schema;
 
 use common::StringDiff;

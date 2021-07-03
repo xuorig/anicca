@@ -1,6 +1,7 @@
 use super::common::OptionalStringDiff;
 use super::parameters::ParametersDiff;
 use super::request_body::RequestBodyDiff;
+use super::responses::ResponsesDiff;
 use openapiv3::Operation;
 use serde::Serialize;
 use std::collections::HashSet;
@@ -13,6 +14,7 @@ pub struct OperationDiff {
     pub operation_id: Option<OptionalStringDiff>,
     pub parameters: ParametersDiff,
     pub request_body: Option<RequestBodyDiff>,
+    pub responses: ResponsesDiff,
 }
 
 impl OperationDiff {
@@ -46,6 +48,8 @@ impl OperationDiff {
             None
         };
 
+        let responses = ResponsesDiff::from_responses(&base.responses, &head.responses);
+
         Self {
             tags: tags_diff,
             summary: summary_diff,
@@ -53,6 +57,7 @@ impl OperationDiff {
             operation_id: operation_id_diff,
             parameters,
             request_body,
+            responses,
         }
     }
 }
