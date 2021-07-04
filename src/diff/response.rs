@@ -4,7 +4,7 @@ use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct ResponseDiff {
-    content: Option<ContentDiff>,
+    pub content: Option<ContentDiff>,
 }
 
 impl ResponseDiff {

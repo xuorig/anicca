@@ -7,15 +7,14 @@ type ResponseCodePair = (StatusCode, ReferenceOr<Response>);
 
 #[derive(Debug, Serialize)]
 pub struct ResponsesDiff {
-    added: Vec<ResponseCodePair>,
-    removed: Vec<ResponseCodePair>,
-    changed: HashMap<StatusCode, ResponseDiff>,
+    pub added: Vec<ResponseCodePair>,
+    pub removed: Vec<ResponseCodePair>,
+    pub changed: HashMap<StatusCode, ResponseDiff>,
 }
 
 impl ResponsesDiff {
     pub fn has_changes(&self) -> bool {
-        // TODO
-        true
+        !self.added.is_empty() || !self.removed.is_empty() || !self.changed.is_empty()
     }
 
     pub fn from_responses(base: &Responses, head: &Responses) -> Self {
