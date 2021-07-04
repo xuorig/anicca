@@ -2,7 +2,7 @@
 
 > Everything changes and nothing stands still.
 
-Get the difference between two OpenAPI descriptions.
+Get the difference between two OpenAPI descriptions. **Still in heavy development, use at your own risk.**
 
 ## CLI
 
