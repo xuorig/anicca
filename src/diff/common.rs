@@ -1,4 +1,17 @@
-use serde::Serialize;
+use crate::json_ref::{resolve, DereferenceError};
+use http::uri::Uri;
+use openapiv3::ReferenceOr;
+use serde::{Deserialize, Serialize};
+
+pub fn dereference<T: for<'de> Deserialize<'de>>(
+    reference_or: ReferenceOr<T>,
+    base_uri: Uri,
+) -> Result<T, DereferenceError> {
+    match reference_or {
+        ReferenceOr::Reference { reference } => resolve::<T>(base_uri, reference),
+        ReferenceOr::Item(i) => Ok(i),
+    }
+}
 
 #[derive(Debug, Serialize)]
 pub struct OptionalStringDiff {
