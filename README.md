@@ -2,7 +2,7 @@
 
 > Everything changes and nothing stands still.
 
-Get the difference between two OpenAPI descriptions.
+Get the difference between two OpenAPI descriptions. **Still in heavy development, use at your own risk.**
 
 ## CLI
 
@@ -44,14 +44,14 @@ Here is the list of OpenAPI objects and properties oaidiff currently compares.
         - [ ] Changed
           - [x] Required
           - [x] In
-          - [ ] Schema
+          - [x] Schema
           - [ ] Deprecated
           - [ ] Format
           - [ ] Example
           - [ ] Examples
           - [ ] Extegnsions
-      - [ ] Request Body
-      - [ ] Responses
+      - [x] Request Body
+      - [x] Responses
       - [ ] Deprecated
       - [ ] Security
       - [ ] Servers
