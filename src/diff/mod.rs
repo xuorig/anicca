@@ -31,7 +31,7 @@ pub enum DiffError {
 
     /// Represents all cases of `serde_json::Error`.
     #[error(transparent)]
-    SerdeError(#[from] serde_json::Error),
+    SerdeError(#[from] serde_yaml::Error),
 }
 
 #[derive(Debug, Serialize)]
@@ -40,11 +40,11 @@ pub struct Diff {
     pub paths: PathsDiff,
 }
 
-pub fn diff_json(base: PathBuf, head: PathBuf) -> Result<Diff, DiffError> {
+pub fn diff_files(base: PathBuf, head: PathBuf) -> Result<Diff, DiffError> {
     let base_contents = std::fs::read_to_string(base)?;
     let head_contents = std::fs::read_to_string(head)?;
-    let base_openapi: OpenAPI = serde_json::from_str(&base_contents)?;
-    let head_openapi: OpenAPI = serde_json::from_str(&head_contents)?;
+    let base_openapi: OpenAPI = serde_yaml::from_str(&base_contents)?;
+    let head_openapi: OpenAPI = serde_yaml::from_str(&head_contents)?;
     diff(base_openapi, head_openapi)
 }
 
@@ -63,9 +63,23 @@ mod tests {
 
     #[test]
     fn from_json_files() {
-        let diff = diff_json(
+        let diff = diff_files(
             PathBuf::from("fixtures/pet-store.json"),
             PathBuf::from("fixtures/pet-store-changed.json"),
+        )
+        .expect("Failed to diff JSON");
+
+        let version_change = diff.version.unwrap();
+
+        assert_eq!("3.0.0", version_change.from);
+        assert_eq!("3.1.0", version_change.to);
+    }
+
+    #[test]
+    fn from_yaml_files() {
+        let diff = diff_files(
+            PathBuf::from("fixtures/pet-store.yaml"),
+            PathBuf::from("fixtures/pet-store-changed.yaml"),
         )
         .expect("Failed to diff JSON");
 

@@ -1,5 +1,5 @@
 use super::formatters::markdown::Printer;
-use crate::diff::diff_json;
+use crate::diff::diff_files;
 use clap::arg_enum;
 use std::path::PathBuf;
 use structopt::StructOpt;
@@ -30,7 +30,7 @@ arg_enum! {
 
 impl DiffCommand {
     pub fn run(&self) {
-        let res = diff_json(self.base.clone(), self.head.clone());
+        let res = diff_files(self.base.clone(), self.head.clone());
 
         match res {
             Ok(diff) => match self.format {
