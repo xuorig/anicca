@@ -44,14 +44,14 @@ Here is the list of OpenAPI objects and properties oaidiff currently compares.
         - [ ] Changed
           - [x] Required
           - [x] In
-          - [ ] Schema
+          - [x] Schema
           - [ ] Deprecated
           - [ ] Format
           - [ ] Example
           - [ ] Examples
           - [ ] Extegnsions
-      - [ ] Request Body
-      - [ ] Responses
+      - [x] Request Body
+      - [x] Responses
       - [ ] Deprecated
       - [ ] Security
       - [ ] Servers
