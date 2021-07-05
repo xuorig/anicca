@@ -1,5 +1,5 @@
 use crate::diff::parameters::ParametersDiff;
-use openapiv3::{Parameter, ReferenceOr};
+use crate::openapi::{Parameter, ReferenceOr};
 
 pub struct ParametersPrinter<'a> {
     pub parameters: &'a ParametersDiff,

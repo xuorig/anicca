@@ -1,5 +1,5 @@
 use super::parameter::ParameterDiff;
-use openapiv3::{Parameter, ReferenceOr};
+use crate::openapi::{Parameter, ReferenceOr};
 use serde::Serialize;
 use std::collections::HashMap;
 
@@ -118,11 +118,8 @@ impl ParametersDiff {
 mod tests {
     use super::*;
 
-    use indexmap::IndexMap;
-    use openapiv3::{
-        Operation, ParameterData, ParameterSchemaOrContent, QueryStyle, Schema, SchemaData,
-        SchemaKind, StringType, Type,
-    };
+    use crate::openapi::{Operation, ParameterData, ParameterSchemaOrContent, QueryStyle, Schema};
+    use std::collections::BTreeMap;
 
     #[test]
     fn added_parameter() {
@@ -134,16 +131,14 @@ mod tests {
                 description: Some(String::from("myParam")),
                 deprecated: None,
                 example: None,
-                examples: IndexMap::default(),
-                extensions: IndexMap::default(),
-                format: ParameterSchemaOrContent::Schema(ReferenceOr::Item(Schema {
-                    schema_data: SchemaData::default(),
-                    schema_kind: SchemaKind::Type(Type::String(StringType::default())),
-                })),
-                required: true,
+                examples: BTreeMap::default(),
+                extensions: BTreeMap::default(),
+                format: ParameterSchemaOrContent::Schema(ReferenceOr::Item(Schema::default())),
+                required: false,
+                explode: None,
             },
             allow_empty_value: None,
-            allow_reserved: false,
+            allow_reserved: Some(false),
             style: QueryStyle::Form,
         };
 
@@ -186,16 +181,14 @@ mod tests {
                 description: Some(String::from("myParam")),
                 deprecated: None,
                 example: None,
-                examples: IndexMap::default(),
-                extensions: IndexMap::default(),
-                format: ParameterSchemaOrContent::Schema(ReferenceOr::Item(Schema {
-                    schema_data: SchemaData::default(),
-                    schema_kind: SchemaKind::Type(Type::String(StringType::default())),
-                })),
+                examples: BTreeMap::default(),
+                extensions: BTreeMap::default(),
+                format: ParameterSchemaOrContent::Schema(ReferenceOr::Item(Schema::default())),
                 required: true,
+                explode: None,
             },
             allow_empty_value: None,
-            allow_reserved: false,
+            allow_reserved: Some(false),
             style: QueryStyle::Form,
         };
 

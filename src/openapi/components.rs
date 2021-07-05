@@ -1,5 +1,5 @@
 use super::*;
-use indexmap::IndexMap;
+use std::collections::BTreeMap;
 use serde::{Deserialize, Serialize};
 
 /// Holds a set of reusable objects for different aspects of the OAS.
@@ -10,35 +10,35 @@ use serde::{Deserialize, Serialize};
 #[serde(rename_all = "camelCase")]
 pub struct Components {
     /// An object to hold reusable Security Scheme Objects.
-    #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
-    pub security_schemes: IndexMap<String, ReferenceOr<SecurityScheme>>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub security_schemes:BTreeMap<String, ReferenceOr<SecurityScheme>>,
     /// An object to hold reusable Response Objects.
-    #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
-    pub responses: IndexMap<String, ReferenceOr<Response>>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub responses:BTreeMap<String, ReferenceOr<Response>>,
     /// An object to hold reusable Parameter Objects.
-    #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
-    pub parameters: IndexMap<String, ReferenceOr<Parameter>>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub parameters:BTreeMap<String, ReferenceOr<Parameter>>,
     /// An object to hold reusable Example Objects.
-    #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
-    pub examples: IndexMap<String, ReferenceOr<Example>>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub examples:BTreeMap<String, ReferenceOr<Example>>,
     /// An object to hold reusable Request Body Objects.
-    #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
-    pub request_bodies: IndexMap<String, ReferenceOr<RequestBody>>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub request_bodies:BTreeMap<String, ReferenceOr<RequestBody>>,
     /// An object to hold reusable Header Objects.
-    #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
-    pub headers: IndexMap<String, ReferenceOr<Header>>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub headers:BTreeMap<String, ReferenceOr<Header>>,
     /// An object to hold reusable Schema Objects.
-    #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
-    pub schemas: IndexMap<String, ReferenceOr<Schema>>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub schemas:BTreeMap<String, ReferenceOr<Schema>>,
     /// An object to hold reusable Link Objects.
-    #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
-    pub links: IndexMap<String, ReferenceOr<Link>>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub links:BTreeMap<String, ReferenceOr<Link>>,
     /// An object to hold reusable Callback Objects.
-    #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
-    pub callbacks: IndexMap<String, ReferenceOr<Callback>>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub callbacks:BTreeMap<String, ReferenceOr<Callback>>,
     /// Inline extensions to this object.
     #[serde(flatten)]
-    pub extensions: IndexMap<String, serde_json::Value>,
+    pub extensions:BTreeMap<String, serde_json::Value>,
 }
 
 /// A map of possible out-of band callbacks related to the parent operation.
@@ -46,4 +46,4 @@ pub struct Components {
 /// requests that may be initiated by the API provider and the expected responses.
 /// The key value used to identify the callback object is an expression,
 /// evaluated at runtime, that identifies a URL to use for the callback operation.
-pub type Callback = IndexMap<String, PathItem>;
+pub type Callback =BTreeMap<String, PathItem>;

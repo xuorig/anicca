@@ -1,5 +1,5 @@
 use super::media_type::MediaType;
-use indexmap::IndexMap;
+use std::collections::BTreeMap;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
@@ -14,12 +14,12 @@ pub struct RequestBody {
     /// the value describes it. For requests that match
     /// multiple keys, only the most specific key is applicable.
     ///  e.g. text/plain overrides text/*
-    #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
-    pub content: IndexMap<String, MediaType>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub content:BTreeMap<String, MediaType>,
     /// Determines if the request body is required in the
     /// request. Defaults to false.
     pub required: Option<bool>,
     /// Inline extensions to this object.
     #[serde(flatten)]
-    pub extensions: IndexMap<String, serde_json::Value>,
+    pub extensions:BTreeMap<String, serde_json::Value>,
 }

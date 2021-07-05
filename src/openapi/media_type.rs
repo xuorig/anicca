@@ -2,8 +2,8 @@ use super::examples::Example;
 use super::parameter::{HeaderStyle, ParameterSchemaOrContent, QueryStyle};
 use super::reference::ReferenceOr;
 use super::schema::Schema;
-use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
+use std::collections::BTreeMap;
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
 pub struct MediaType {
@@ -11,10 +11,10 @@ pub struct MediaType {
     pub schema: Option<ReferenceOr<Schema>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub example: Option<serde_json::Value>,
-    #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
-    pub examples: IndexMap<String, ReferenceOr<Example>>,
-    #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
-    pub encoding: IndexMap<String, Encoding>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub examples: BTreeMap<String, ReferenceOr<Example>>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub encoding: BTreeMap<String, Encoding>,
 }
 
 /// A single encoding definition applied to a single schema property.
@@ -34,8 +34,8 @@ pub struct Encoding {
     /// for example Content-Disposition. Content-Type is described separately
     /// and SHALL be ignored in this section. This property SHALL be ignored
     /// if the request body media type is not a multipart.
-    #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
-    pub headers: IndexMap<String, ReferenceOr<Header>>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub headers: BTreeMap<String, ReferenceOr<Header>>,
     /// Describes how a specific property value will be serialized depending
     /// on its type. See Parameter Object for details on the style property.
     /// The behavior follows the same values as query parameters, including
@@ -60,7 +60,7 @@ pub struct Encoding {
     pub allow_reserved: Option<bool>,
     /// Inline extensions to this object.
     #[serde(flatten)]
-    pub extensions: IndexMap<String, serde_json::Value>,
+    pub extensions: BTreeMap<String, serde_json::Value>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -87,9 +87,9 @@ pub struct Header {
     pub format: ParameterSchemaOrContent,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub example: Option<serde_json::Value>,
-    #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
-    pub examples: IndexMap<String, ReferenceOr<Example>>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub examples: BTreeMap<String, ReferenceOr<Example>>,
     /// Inline extensions to this object.
     #[serde(flatten)]
-    pub extensions: IndexMap<String, serde_json::Value>,
+    pub extensions: BTreeMap<String, serde_json::Value>,
 }

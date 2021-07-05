@@ -1,5 +1,5 @@
 use crate::*;
-use indexmap::IndexMap;
+use std::collections::BTreeMap;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
@@ -15,7 +15,7 @@ pub struct Info {
     pub license: Option<License>,
     pub version: String,
     #[serde(flatten)]
-    pub extensions: IndexMap<String, serde_json::Value>,
+    pub extensions:BTreeMap<String, serde_json::Value>,
 }
 
 /// Contact information for the exposed API.
@@ -34,7 +34,7 @@ pub struct Contact {
     pub email: Option<String>,
     /// Inline extensions to this object.
     #[serde(flatten)]
-    pub extensions: IndexMap<String, serde_json::Value>,
+    pub extensions:BTreeMap<String, serde_json::Value>,
 }
 
 /// License information for the exposed API.
@@ -47,5 +47,5 @@ pub struct License {
     pub url: Option<String>,
     /// Inline extensions to this object.
     #[serde(flatten)]
-    pub extensions: IndexMap<String, serde_json::Value>,
+    pub extensions:BTreeMap<String, serde_json::Value>,
 }

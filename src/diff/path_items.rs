@@ -1,6 +1,6 @@
 use super::operations::OperationDiff;
 use super::DiffError;
-use openapiv3::{Operation, PathItem, ReferenceOr};
+use crate::openapi::{Operation, PathItem, ReferenceOr};
 use serde::Serialize;
 use std::collections::HashMap;
 

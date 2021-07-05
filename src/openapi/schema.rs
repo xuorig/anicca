@@ -1,5 +1,5 @@
 use super::reference::ReferenceOr;
-use indexmap::IndexMap;
+use std::collections::BTreeMap;
 use serde::{Deserialize, Serialize};
 
 /// The Schema Object allows the definition of input and output data types.
@@ -35,7 +35,7 @@ pub struct Schema {
     pub items: Option<Box<Schema>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub properties: Option<IndexMap<String, Schema>>,
+    pub properties: Option<BTreeMap<String, Schema>>,
 
     #[serde(skip_serializing_if = "Option::is_none", rename = "readOnly")]
     pub read_only: Option<bool>,
@@ -109,7 +109,7 @@ pub struct Schema {
 
     /// [Specification extensions](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#specificationExtensions)
     #[serde(flatten)]
-    pub extensions: IndexMap<String, serde_json::Value>,
+    pub extensions:BTreeMap<String, serde_json::Value>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

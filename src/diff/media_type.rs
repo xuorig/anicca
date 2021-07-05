@@ -1,5 +1,5 @@
 use super::schema::SchemaDiff;
-use openapiv3::{MediaType, ReferenceOr, Schema};
+use crate::openapi::{MediaType, ReferenceOr, Schema};
 use serde::Serialize;
 
 #[derive(Debug, Serialize)]

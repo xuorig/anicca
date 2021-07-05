@@ -1,6 +1,6 @@
 use super::*;
-use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
+use std::collections::BTreeMap;
 
 /// Describes a single operation parameter.
 ///
@@ -28,7 +28,8 @@ pub struct ParameterData {
     /// is REQUIRED and its value MUST be true. Otherwise,
     /// the property MAY be included and its default value
     /// is false.
-    pub required: Option<bool>,
+    #[serde(default = "default_as_false")]
+    pub required: bool,
     /// Specifies that a parameter is deprecated and SHOULD
     /// be transitioned out of usage.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -37,13 +38,13 @@ pub struct ParameterData {
     pub format: ParameterSchemaOrContent,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub example: Option<serde_json::Value>,
-    #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
-    pub examples: IndexMap<String, ReferenceOr<Example>>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub examples: BTreeMap<String, ReferenceOr<Example>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub explode: Option<bool>,
     /// Inline extensions to this object.
     #[serde(flatten)]
-    pub extensions: IndexMap<String, serde_json::Value>,
+    pub extensions: BTreeMap<String, serde_json::Value>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
@@ -54,7 +55,7 @@ pub enum ParameterSchemaOrContent {
     Content(Content),
 }
 
-pub type Content = IndexMap<String, MediaType>;
+pub type Content = BTreeMap<String, MediaType>;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(tag = "in")]
@@ -164,4 +165,8 @@ impl Default for HeaderStyle {
     fn default() -> HeaderStyle {
         HeaderStyle::Simple
     }
+}
+
+fn default_as_false() -> bool {
+    false
 }

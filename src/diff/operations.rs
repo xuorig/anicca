@@ -2,7 +2,7 @@ use super::common::OptionalStringDiff;
 use super::parameters::ParametersDiff;
 use super::request_body::RequestBodyDiff;
 use super::responses::ResponsesDiff;
-use openapiv3::Operation;
+use crate::openapi::Operation;
 use serde::Serialize;
 use std::collections::HashSet;
 

@@ -1,5 +1,5 @@
 use super::response::ResponseDiff;
-use openapiv3::{ReferenceOr, Response, Responses, StatusCode};
+use crate::openapi::{ReferenceOr, Response, Responses, StatusCode};
 use serde::Serialize;
 use std::collections::HashMap;
 

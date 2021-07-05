@@ -1,4 +1,4 @@
-use indexmap::IndexMap;
+use std::collections::BTreeMap;
 use serde::{Deserialize, Serialize};
 
 /// Allows referencing an external resource for extended documentation.
@@ -13,5 +13,5 @@ pub struct ExternalDocumentation {
     pub url: String,
     /// Inline extensions to this object.
     #[serde(flatten)]
-    pub extensions: IndexMap<String, serde_json::Value>,
+    pub extensions:BTreeMap<String, serde_json::Value>,
 }

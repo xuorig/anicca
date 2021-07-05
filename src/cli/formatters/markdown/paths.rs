@@ -1,6 +1,6 @@
 use super::operations::OperationsPrinter;
 use crate::diff::paths::PathsDiff;
-use openapiv3::{Parameter, ReferenceOr};
+use crate::openapi::{Parameter, ReferenceOr};
 
 pub struct PathsPrinter<'a> {
     pub diff: &'a PathsDiff,

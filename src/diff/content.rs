@@ -1,6 +1,6 @@
 use super::media_type::MediaTypeDiff;
-use indexmap::IndexMap;
-use openapiv3::MediaType;
+use crate::openapi::MediaType;
+use std::collections::BTreeMap;
 use serde::Serialize;
 use std::collections::HashMap;
 
@@ -19,8 +19,8 @@ impl ContentDiff {
     }
 
     pub fn from_content(
-        base: &IndexMap<String, MediaType>,
-        head: &IndexMap<String, MediaType>,
+        base: &BTreeMap<String, MediaType>,
+        head: &BTreeMap<String, MediaType>,
     ) -> Self {
         let mut media_types_added = vec![];
         let mut media_types_removed = vec![];

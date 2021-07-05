@@ -1,5 +1,5 @@
-use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
+use std::collections::BTreeMap;
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
 pub struct Example {
@@ -25,5 +25,5 @@ pub struct Example {
     pub external_value: Option<String>,
     /// Inline extensions to this object.
     #[serde(flatten)]
-    pub extensions: IndexMap<String, serde_json::Value>,
+    pub extensions: BTreeMap<String, serde_json::Value>,
 }

@@ -1,5 +1,5 @@
 use super::content::ContentDiff;
-use openapiv3::{ReferenceOr, RequestBody};
+use crate::openapi::{ReferenceOr, RequestBody};
 use serde::Serialize;
 
 #[derive(Debug, Serialize)]

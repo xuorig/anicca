@@ -1,6 +1,6 @@
 use super::path_items::{PathItemDiff, PathItemPair};
 use super::DiffError;
-use openapiv3::Paths;
+use crate::openapi::Paths;
 use serde::Serialize;
 use std::collections::HashMap;
 
@@ -49,7 +49,7 @@ impl PathsDiff {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use openapiv3::{PathItem, ReferenceOr};
+    use crate::openapi::{PathItem, ReferenceOr};
 
     #[test]
     fn path_added() {

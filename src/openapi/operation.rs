@@ -1,5 +1,5 @@
 use super::*;
-use indexmap::IndexMap;
+use std::collections::BTreeMap;
 use serde::{Deserialize, Serialize};
 
 /// Describes a single API operation on a path.
@@ -67,5 +67,5 @@ pub struct Operation {
     pub servers: Vec<Server>,
     /// Inline extensions to this object.
     #[serde(flatten)]
-    pub extensions: IndexMap<String, serde_json::Value>,
+    pub extensions:BTreeMap<String, serde_json::Value>,
 }

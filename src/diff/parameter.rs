@@ -1,6 +1,6 @@
 use super::common::{BooleanDiff, StringDiff};
 use super::schema::SchemaDiff;
-use openapiv3::{Parameter, ParameterData, ParameterSchemaOrContent};
+use crate::openapi::{Parameter, ParameterData, ParameterSchemaOrContent};
 use serde::Serialize;
 
 #[derive(Debug, Serialize)]

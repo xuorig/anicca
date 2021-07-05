@@ -11,8 +11,8 @@ pub(crate) mod response;
 pub(crate) mod responses;
 pub(crate) mod schema;
 
+use crate::openapi::OpenAPI;
 use common::StringDiff;
-use openapiv3::OpenAPI;
 use paths::PathsDiff;
 use serde::Serialize;
 use std::path::PathBuf;
