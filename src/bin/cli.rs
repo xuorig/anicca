@@ -1,6 +1,7 @@
+use anicca::cli::Anicca;
 use structopt::StructOpt;
 
 fn main() {
-    let app = heraclitus::cli::Heraclitus::from_args();
+    let app = Anicca::from_args();
     app.run();
 }
