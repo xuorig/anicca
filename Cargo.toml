@@ -1,5 +1,5 @@
 [package]
-name = "heraclitus"
+name = "anicca"
 description = "Libary and CLI to diff two OpenAPI description documents"
 version = "0.1.0"
 authors = ["xuorig <mgiroux0@gmail.com>"]

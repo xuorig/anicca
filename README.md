@@ -1,6 +1,4 @@
-# Heraclitus
-
-> Everything changes and nothing stands still.
+# Anicca
 
 Get the difference between two OpenAPI descriptions. **Still in heavy development, use at your own risk.**
 
