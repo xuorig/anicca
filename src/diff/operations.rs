@@ -1,4 +1,4 @@
-use super::common::OptionalStringDiff;
+use super::common::{OptionalStringDiff, StringListDiff};
 use super::parameters::ParametersDiff;
 use super::request_body::RequestBodyDiff;
 use super::responses::ResponsesDiff;
@@ -8,7 +8,7 @@ use std::collections::HashSet;
 
 #[derive(Debug, Serialize)]
 pub struct OperationDiff {
-    pub tags: TagsDiff,
+    pub tags: StringListDiff,
     pub summary: Option<OptionalStringDiff>,
     pub description: Option<OptionalStringDiff>,
     pub operation_id: Option<OptionalStringDiff>,
@@ -26,7 +26,7 @@ impl OperationDiff {
     }
 
     pub fn from_operations(base: &Operation, head: &Operation) -> Self {
-        let tags_diff = TagsDiff::from_tags(&base.tags, &head.tags);
+        let tags_diff = StringListDiff::from_lists(&base.tags, &head.tags);
 
         let summary_diff = OptionalStringDiff::from_strings(&base.summary, &head.summary);
 
@@ -58,36 +58,6 @@ impl OperationDiff {
             request_body,
             responses,
         }
-    }
-}
-
-#[derive(Debug, Serialize)]
-pub struct TagsDiff {
-    pub added: Vec<String>,
-    pub removed: Vec<String>,
-}
-
-impl TagsDiff {
-    pub fn from_tags(base: &Vec<String>, head: &Vec<String>) -> Self {
-        let base_set: HashSet<_> = base.iter().collect();
-        let added: Vec<_> = head
-            .iter()
-            .filter(|item| !base_set.contains(item))
-            .cloned()
-            .collect();
-
-        let head_set: HashSet<_> = head.iter().collect();
-        let removed: Vec<_> = base
-            .iter()
-            .filter(|item| !head_set.contains(item))
-            .cloned()
-            .collect();
-
-        Self { added, removed }
-    }
-
-    pub fn has_changes(&self) -> bool {
-        !self.added.is_empty() || !self.removed.is_empty()
     }
 }
 

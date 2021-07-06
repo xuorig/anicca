@@ -1,4 +1,35 @@
 use serde::Serialize;
+use std::collections::HashSet;
+
+#[derive(Debug, Serialize)]
+pub struct StringListDiff {
+    pub added: Vec<String>,
+    pub removed: Vec<String>,
+}
+
+impl StringListDiff {
+    pub fn from_lists(base: &Vec<String>, head: &Vec<String>) -> Self {
+        let base_set: HashSet<_> = base.iter().collect();
+        let added: Vec<_> = head
+            .iter()
+            .filter(|item| !base_set.contains(item))
+            .cloned()
+            .collect();
+
+        let head_set: HashSet<_> = head.iter().collect();
+        let removed: Vec<_> = base
+            .iter()
+            .filter(|item| !head_set.contains(item))
+            .cloned()
+            .collect();
+
+        Self { added, removed }
+    }
+
+    pub fn has_changes(&self) -> bool {
+        !self.added.is_empty() || !self.removed.is_empty()
+    }
+}
 
 #[derive(Debug, Serialize)]
 pub struct OptionalStringDiff {
