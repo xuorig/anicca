@@ -19,22 +19,40 @@ impl<'a> SchemaPrinter<'a> {
             ));
         }
 
-        for p in &self.diff.properties_added {
-            result.push_str(&format!(
-                "{:indent$}- Property `{}` was added.\n",
-                "",
-                p,
-                indent = self.indent
-            ));
-        }
+        if let Some(properties_diff) = &self.diff.properties_changed {
+            for p in &properties_diff.added {
+                result.push_str(&format!(
+                    "{:indent$}- Property `{}` was added.\n",
+                    "",
+                    p.0,
+                    indent = self.indent
+                ));
+            }
 
-        for p in &self.diff.properties_removed {
-            result.push_str(&format!(
-                "{:indent$}- Property `{}` was removed.\n",
-                "",
-                p,
-                indent = self.indent
-            ));
+            for p in &properties_diff.removed {
+                result.push_str(&format!(
+                    "{:indent$}- Property `{}` was removed.\n",
+                    "",
+                    p.0,
+                    indent = self.indent
+                ));
+            }
+
+            for (p, diff) in &properties_diff.changed {
+                result.push_str(&format!(
+                    "{:indent$}- Property `{}` was changed:\n",
+                    "",
+                    p,
+                    indent = self.indent
+                ));
+
+                let schema_diff = SchemaPrinter {
+                    diff,
+                    indent: self.indent + 2,
+                }
+                .print();
+                result.push_str(&schema_diff);
+            }
         }
 
         result

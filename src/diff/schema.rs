@@ -1,4 +1,4 @@
-use super::common::{OptionalStringDiff, StringListDiff};
+use super::common::{BooleanDiff, OptionalStringDiff, StringListDiff};
 use crate::openapi::{ReferenceOr, Schema};
 use serde::Serialize;
 use std::collections::{BTreeMap, HashMap, HashSet};
@@ -11,15 +11,18 @@ pub struct SchemaDiff {
     pub required_changed: Option<StringListDiff>,
     pub properties_changed: Option<PropertiesDiff>,
     pub enum_changed: Option<EnumDiff>,
-    pub properties_added: Vec<String>,
-    pub properties_removed: Vec<String>,
+    pub items_changed: Option<Box<SchemaDiff>>,
+    pub nullable_changed: Option<BooleanDiff>,
 }
 
 impl SchemaDiff {
     pub fn has_changes(&self) -> bool {
         self.type_changed.is_some()
-            || !self.properties_added.is_empty()
-            || !self.properties_removed.is_empty()
+            || self.properties_changed.is_some()
+            || self.description_changed.is_some()
+            || self.format_changed.is_some()
+            || self.required_changed.is_some()
+            || self.enum_changed.is_some()
     }
 
     pub fn from_schemas(base: &ReferenceOr<Schema>, head: &ReferenceOr<Schema>) -> Self {
@@ -53,6 +56,33 @@ impl SchemaDiff {
         let properties_diff = PropertiesDiff::from_schemas(&base_schema, &head_schema);
         if properties_diff.has_changes() {
             diff.properties_changed = Some(properties_diff);
+        }
+
+        // We could detect if items was added or removed
+        // but let's assume for now that if items is added,
+        // type was changed to array and that is enough of a diff.
+        if let Some(base_items) = &base_schema.items {
+            if let Some(head_items) = &head_schema.items {
+                let items_diff = SchemaDiff::from_schemas(
+                    &ReferenceOr::Item(*base_items.clone()),
+                    &ReferenceOr::Item(*head_items.clone()),
+                );
+                if items_diff.has_changes() {
+                    diff.items_changed = Some(Box::new(items_diff))
+                }
+            }
+        }
+
+        let properties_diff = PropertiesDiff::from_schemas(&base_schema, &head_schema);
+        if properties_diff.has_changes() {
+            diff.properties_changed = Some(properties_diff);
+        }
+
+        let base_nullable = base_schema.nullable.unwrap_or(false);
+        let head_nullable = head_schema.nullable.unwrap_or(false);
+
+        if base_nullable != head_nullable {
+            diff.nullable_changed = BooleanDiff::from_bools(base_nullable, head_nullable);
         }
 
         diff.type_changed =
