@@ -43,8 +43,8 @@ impl SchemaDiff {
         }
 
         let required_diff = StringListDiff::from_lists(
-            base_schema.required.as_ref().unwrap_or_else(|| vec![]),
-            head_schema.required.as_ref().unwrap_or_else(|| vec![]),
+            &base_schema.required.clone().unwrap_or_else(|| vec![]),
+            &head_schema.required.clone().unwrap_or_else(|| vec![]),
         );
         if required_diff.has_changes() {
             diff.required_changed = Some(required_diff);
@@ -146,8 +146,14 @@ impl PropertiesDiff {
         let mut removed = vec![];
         let mut changed: HashMap<String, SchemaDiff> = HashMap::new();
 
-        let base_properties = base.properties.unwrap_or_else(|| BTreeMap::default());
-        let head_properties = head.properties.unwrap_or_else(|| BTreeMap::default());
+        let base_properties = base
+            .properties
+            .clone()
+            .unwrap_or_else(|| BTreeMap::default());
+        let head_properties = head
+            .properties
+            .clone()
+            .unwrap_or_else(|| BTreeMap::default());
 
         for (property_name, schema) in &base_properties {
             match head_properties.get(property_name) {

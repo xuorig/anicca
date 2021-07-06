@@ -4,7 +4,6 @@ use super::request_body::RequestBodyDiff;
 use super::responses::ResponsesDiff;
 use crate::openapi::Operation;
 use serde::Serialize;
-use std::collections::HashSet;
 
 #[derive(Debug, Serialize)]
 pub struct OperationDiff {
