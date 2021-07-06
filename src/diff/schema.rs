@@ -1,4 +1,4 @@
-use super::common::{OptionalStringDiff, StringDiff};
+use super::common::OptionalStringDiff;
 use crate::openapi::{ReferenceOr, Schema};
 use serde::Serialize;
 
@@ -30,19 +30,17 @@ impl SchemaDiff {
             panic!("Refs are not handled yet.");
         };
 
-        let mut diff = Self {
+        Self {
             type_changed: OptionalStringDiff::from_strings(
-                base_schema.schema_type,
-                head_schema.schema_type,
+                &base_schema.schema_type,
+                &head_schema.schema_type,
             ),
             description_changed: OptionalStringDiff::from_strings(
-                base_schema.description,
-                head_schema.description,
+                &base_schema.description,
+                &head_schema.description,
             ),
             properties_added: vec![],
             properties_removed: vec![],
-        };
-
-        diff
+        }
     }
 }

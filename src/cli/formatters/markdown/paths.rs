@@ -1,6 +1,6 @@
 use super::operations::OperationsPrinter;
 use crate::diff::paths::PathsDiff;
-use crate::openapi::{Parameter, ReferenceOr};
+use crate::openapi::ReferenceOr;
 
 pub struct PathsPrinter<'a> {
     pub diff: &'a PathsDiff,
@@ -49,7 +49,7 @@ impl<'a> PathsPrinter<'a> {
                 }
             }
 
-            result.push_str("\n");
+            result.push('\n');
 
             for operation_method in &path_item_diff.operations_removed {
                 match &operation_method.1.operation_id {
@@ -86,7 +86,7 @@ impl<'a> PathsPrinter<'a> {
             }
         }
 
-        result.push_str("\n");
+        result.push('\n');
 
         result
     }
@@ -100,7 +100,7 @@ impl<'a> PathsPrinter<'a> {
             result.push_str(format!("  - {}\n", removed.0).as_str());
         }
 
-        result.push_str("\n");
+        result.push('\n');
 
         result
     }

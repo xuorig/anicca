@@ -20,7 +20,7 @@ impl<'a> MetaPrinter<'a> {
             );
         }
 
-        result.push_str("\n");
+        result.push('\n');
 
         result
     }

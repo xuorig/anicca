@@ -44,10 +44,8 @@ impl<'a> OperationsPrinter<'a> {
                 } else {
                     result.push_str("  - Operation summary was removed.\n");
                 }
-            } else {
-                if let Some(to) = &summary_diff.to {
-                    result.push_str(format!("  - Operation summary added: `{}`\n", to).as_str());
-                }
+            } else if let Some(to) = &summary_diff.to {
+                result.push_str(format!("  - Operation summary added: `{}`\n", to).as_str());
             }
         }
 
@@ -58,11 +56,8 @@ impl<'a> OperationsPrinter<'a> {
                 } else {
                     result.push_str("  - Operation description was removed.\n");
                 }
-            } else {
-                if let Some(to) = &diff.to {
-                    result
-                        .push_str(format!("  - Operation description added: `{}`\n", to).as_str());
-                }
+            } else if let Some(to) = &diff.to {
+                result.push_str(format!("  - Operation description added: `{}`\n", to).as_str());
             }
         }
 
@@ -75,10 +70,8 @@ impl<'a> OperationsPrinter<'a> {
                 } else {
                     result.push_str("  - Operation id was removed.\n");
                 }
-            } else {
-                if let Some(to) = &diff.to {
-                    result.push_str(format!("  - Operation id added: `{}`\n", to).as_str());
-                }
+            } else if let Some(to) = &diff.to {
+                result.push_str(format!("  - Operation id added: `{}`\n", to).as_str());
             }
         }
 

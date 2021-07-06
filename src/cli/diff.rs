@@ -23,8 +23,8 @@ arg_enum! {
     #[derive(Debug)]
     pub enum Format {
         Markdown,
-        JSON,
-        YAML,
+        Json,
+        Yaml,
     }
 }
 
@@ -34,12 +34,12 @@ impl DiffCommand {
 
         match res {
             Ok(diff) => match self.format {
-                Format::JSON => {
+                Format::Json => {
                     let json = serde_json::to_string_pretty(&diff)
                         .expect("Could not serialize diff to JSON");
                     println!("{}", json);
                 }
-                Format::YAML => {
+                Format::Yaml => {
                     let yaml =
                         serde_yaml::to_string(&diff).expect("Could not serialize diff to YAML");
                     println!("{}", yaml);

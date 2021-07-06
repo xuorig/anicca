@@ -7,11 +7,11 @@ pub struct OptionalStringDiff {
 }
 
 impl OptionalStringDiff {
-    pub fn from_strings(base: Option<String>, head: Option<String>) -> Option<Self> {
+    pub fn from_strings(base: &Option<String>, head: &Option<String>) -> Option<Self> {
         if base != head {
             Some(Self {
-                from: base,
-                to: head,
+                from: base.clone(),
+                to: head.clone(),
             })
         } else {
             None

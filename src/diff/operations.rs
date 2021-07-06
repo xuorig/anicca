@@ -28,14 +28,13 @@ impl OperationDiff {
     pub fn from_operations(base: &Operation, head: &Operation) -> Self {
         let tags_diff = TagsDiff::from_tags(&base.tags, &head.tags);
 
-        let summary_diff =
-            OptionalStringDiff::from_strings(base.summary.clone(), head.summary.clone());
+        let summary_diff = OptionalStringDiff::from_strings(&base.summary, &head.summary);
 
         let description_diff =
-            OptionalStringDiff::from_strings(base.description.clone(), head.description.clone());
+            OptionalStringDiff::from_strings(&base.description, &head.description);
 
         let operation_id_diff =
-            OptionalStringDiff::from_strings(base.operation_id.clone(), head.operation_id.clone());
+            OptionalStringDiff::from_strings(&base.operation_id, &head.operation_id);
 
         let parameters = ParametersDiff::from_params(&base.parameters, &head.parameters);
 
@@ -74,14 +73,14 @@ impl TagsDiff {
         let added: Vec<_> = head
             .iter()
             .filter(|item| !base_set.contains(item))
-            .map(|item| item.clone())
+            .cloned()
             .collect();
 
         let head_set: HashSet<_> = head.iter().collect();
         let removed: Vec<_> = base
             .iter()
             .filter(|item| !head_set.contains(item))
-            .map(|item| item.clone())
+            .cloned()
             .collect();
 
         Self { added, removed }

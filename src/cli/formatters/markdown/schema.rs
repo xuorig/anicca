@@ -13,8 +13,8 @@ impl<'a> SchemaPrinter<'a> {
             result.push_str(&format!(
                 "{:indent$}- Schema type changed from `{}` to `{}`.\n",
                 "",
-                type_change.from,
-                type_change.to,
+                type_change.from.clone().unwrap_or("null".into()),
+                type_change.to.clone().unwrap_or("null".into()),
                 indent = self.indent,
             ));
         }
