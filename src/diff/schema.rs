@@ -1,11 +1,11 @@
-use super::common::StringDiff;
+use super::common::{OptionalStringDiff, StringDiff};
 use crate::openapi::{ReferenceOr, Schema};
 use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct SchemaDiff {
-    pub type_changed: Option<StringDiff>,
-    pub schema_kind_changed: Option<StringDiff>,
+    pub type_changed: Option<OptionalStringDiff>,
+    pub description_changed: Option<OptionalStringDiff>,
     pub properties_added: Vec<String>,
     pub properties_removed: Vec<String>,
 }
@@ -13,7 +13,6 @@ pub struct SchemaDiff {
 impl SchemaDiff {
     pub fn has_changes(&self) -> bool {
         self.type_changed.is_some()
-            || self.schema_kind_changed.is_some()
             || !self.properties_added.is_empty()
             || !self.properties_removed.is_empty()
     }
@@ -32,8 +31,14 @@ impl SchemaDiff {
         };
 
         let mut diff = Self {
-            type_changed: None,
-            schema_kind_changed: None,
+            type_changed: OptionalStringDiff::from_strings(
+                base_schema.schema_type,
+                head_schema.schema_type,
+            ),
+            description_changed: OptionalStringDiff::from_strings(
+                base_schema.description,
+                head_schema.description,
+            ),
             properties_added: vec![],
             properties_removed: vec![],
         };

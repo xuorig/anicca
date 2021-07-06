@@ -7,22 +7,22 @@ use structopt::StructOpt;
 #[derive(Debug, StructOpt)]
 pub struct DiffCommand {
     /// The base OpenAPI description
-    #[structopt(short = "b", long = "base-file", parse(from_os_str))]
+    #[structopt(parse(from_os_str))]
     base: PathBuf,
 
     /// The head OpenAPI description to be compared with base
-    #[structopt(short = "h", long = "head-file", parse(from_os_str))]
+    #[structopt(parse(from_os_str))]
     head: PathBuf,
 
     /// Output format for the diff
-    #[structopt(short = "f", long = "format", default_value = "default", possible_values = &Format::variants(), case_insensitive = true)]
+    #[structopt(short = "f", long = "format", default_value = "markdown", possible_values = &Format::variants(), case_insensitive = true)]
     format: Format,
 }
 
 arg_enum! {
     #[derive(Debug)]
     pub enum Format {
-        Default,
+        Markdown,
         JSON,
         YAML,
     }
@@ -44,7 +44,7 @@ impl DiffCommand {
                         serde_yaml::to_string(&diff).expect("Could not serialize diff to YAML");
                     println!("{}", yaml);
                 }
-                Format::Default => {
+                Format::Markdown => {
                     let md = Printer::print(&diff);
                     println!("{}", md);
                 }
