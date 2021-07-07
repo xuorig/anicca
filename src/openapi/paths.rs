@@ -2,8 +2,8 @@ use super::operation::Operation;
 use super::parameter::Parameter;
 use super::reference::ReferenceOr;
 use super::server::Server;
-use std::collections::BTreeMap;
 use serde::{Deserialize, Serialize};
+use std::collections::BTreeMap;
 
 /// Describes the operations available on a single path.
 /// A Path Item MAY be empty, due to ACL constraints.
@@ -44,11 +44,11 @@ pub struct PathItem {
     pub parameters: Vec<ReferenceOr<Parameter>>,
     /// Inline extensions to this object.
     #[serde(flatten)]
-    pub extensions:BTreeMap<String, serde_json::Value>,
+    pub extensions: BTreeMap<String, serde_json::Value>,
 }
 
 /// Holds the relative paths to the individual endpoints and
 /// their operations. The path is appended to the URL from the
 /// Server Object in order to construct the full URL. The Paths
 /// MAY be empty, due to ACL constraints.
-pub type Paths =BTreeMap<String, ReferenceOr<PathItem>>;
+pub type Paths = BTreeMap<String, ReferenceOr<PathItem>>;

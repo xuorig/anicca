@@ -1,5 +1,7 @@
 pub(crate) mod common;
 pub(crate) mod content;
+pub(crate) mod extensions;
+pub(crate) mod info;
 pub(crate) mod media_type;
 pub(crate) mod operations;
 pub(crate) mod parameter;
@@ -13,6 +15,7 @@ pub(crate) mod schema;
 
 use crate::openapi::OpenAPI;
 use common::StringDiff;
+use info::InfoDiff;
 use paths::PathsDiff;
 use serde::Serialize;
 use std::path::PathBuf;
@@ -38,6 +41,7 @@ pub enum DiffError {
 pub struct Diff {
     pub version: Option<StringDiff>,
     pub paths: PathsDiff,
+    pub info: InfoDiff,
 }
 
 pub fn diff_files(base: PathBuf, head: PathBuf) -> Result<Diff, DiffError> {
@@ -51,9 +55,12 @@ pub fn diff_files(base: PathBuf, head: PathBuf) -> Result<Diff, DiffError> {
 pub fn diff(base: OpenAPI, head: OpenAPI) -> Result<Diff, DiffError> {
     let version_diff = StringDiff::from_strings(base.openapi, head.openapi);
     let paths_diff = PathsDiff::from_paths(&base.paths, &head.paths)?;
+    let info_diff = InfoDiff::from_info(&base.info, &head.info);
+
     Ok(Diff {
         version: version_diff,
         paths: paths_diff,
+        info: info_diff,
     })
 }
 
