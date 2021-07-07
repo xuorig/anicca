@@ -1,5 +1,7 @@
 # Anicca
 
+> https://en.wikipedia.org/wiki/Impermanence
+
 Get the difference between two OpenAPI descriptions. **Still in heavy development, use at your own risk.**
 
 ## Usage
