@@ -12,6 +12,10 @@ pub struct PathsDiff {
 }
 
 impl PathsDiff {
+    pub fn has_changes(&self) -> bool {
+        !self.added.is_empty() || !self.removed.is_empty() || !self.changed.is_empty()
+    }
+
     /// Diffs two sets of OpenAPI paths
     pub(crate) fn from_paths(base: &Paths, head: &Paths) -> Result<Self, DiffError> {
         let mut paths_added = vec![];

@@ -12,12 +12,14 @@ pub(crate) mod request_body;
 pub(crate) mod response;
 pub(crate) mod responses;
 pub(crate) mod schema;
+pub(crate) mod servers;
 
 use crate::openapi::OpenAPI;
 use common::StringDiff;
 use info::InfoDiff;
 use paths::PathsDiff;
 use serde::Serialize;
+use servers::ServersDiff;
 use std::path::PathBuf;
 use thiserror::Error;
 
@@ -37,11 +39,12 @@ pub enum DiffError {
     SerdeError(#[from] serde_yaml::Error),
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Default)]
 pub struct Diff {
     pub version: Option<StringDiff>,
-    pub paths: PathsDiff,
-    pub info: InfoDiff,
+    pub servers: Option<ServersDiff>,
+    pub paths: Option<PathsDiff>,
+    pub info: Option<InfoDiff>,
 }
 
 pub fn diff_files(base: PathBuf, head: PathBuf) -> Result<Diff, DiffError> {
@@ -53,15 +56,26 @@ pub fn diff_files(base: PathBuf, head: PathBuf) -> Result<Diff, DiffError> {
 }
 
 pub fn diff(base: OpenAPI, head: OpenAPI) -> Result<Diff, DiffError> {
-    let version_diff = StringDiff::from_strings(base.openapi, head.openapi);
-    let paths_diff = PathsDiff::from_paths(&base.paths, &head.paths)?;
-    let info_diff = InfoDiff::from_info(&base.info, &head.info);
+    let mut diff = Diff::default();
 
-    Ok(Diff {
-        version: version_diff,
-        paths: paths_diff,
-        info: info_diff,
-    })
+    diff.version = StringDiff::from_strings(base.openapi, head.openapi);
+
+    let paths_diff = PathsDiff::from_paths(&base.paths, &head.paths)?;
+    if paths_diff.has_changes() {
+        diff.paths = Some(paths_diff);
+    }
+
+    let info_diff = InfoDiff::from_info(&base.info, &head.info);
+    if info_diff.has_changes() {
+        diff.info = Some(info_diff);
+    }
+
+    let servers_diff = ServersDiff::from_servers(&base.servers, &head.servers);
+    if servers_diff.has_changes() {
+        diff.servers = Some(servers_diff);
+    }
+
+    Ok(diff)
 }
 
 #[cfg(test)]

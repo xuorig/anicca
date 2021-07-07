@@ -21,8 +21,10 @@ impl Printer {
         let meta = MetaPrinter { diff: &diff }.print();
         result.push_str(&meta);
 
-        let paths = PathsPrinter { diff: &diff.paths }.print();
-        result.push_str(&paths);
+        if let Some(paths_diff) = &diff.paths {
+            let paths = PathsPrinter { diff: paths_diff }.print();
+            result.push_str(&paths);
+        }
 
         result
     }
