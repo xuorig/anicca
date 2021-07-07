@@ -1,3 +1,4 @@
+pub mod extensions;
 pub mod meta;
 pub mod operations;
 pub mod parameters;
