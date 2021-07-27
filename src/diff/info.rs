@@ -16,7 +16,13 @@ pub struct InfoDiff {
 
 impl InfoDiff {
     pub fn has_changes(&self) -> bool {
-        true
+        self.title.is_some()
+            || self.description.is_some()
+            || self.terms_of_service.is_some()
+            || self.contact.is_some()
+            || self.license.is_some()
+            || self.version.is_some()
+            || self.extensions.is_some()
     }
 
     pub fn from_info(base: &Info, head: &Info) -> Self {

@@ -47,6 +47,15 @@ pub struct Diff {
     pub info: Option<InfoDiff>,
 }
 
+impl Diff {
+    pub fn has_changes(&self) -> bool {
+        self.version.is_some()
+            || self.servers.is_some()
+            || self.paths.is_some()
+            || self.info.is_some()
+    }
+}
+
 pub fn diff_files(base: PathBuf, head: PathBuf) -> Result<Diff, DiffError> {
     let base_contents = std::fs::read_to_string(base)?;
     let head_contents = std::fs::read_to_string(head)?;
@@ -90,10 +99,23 @@ mod tests {
         )
         .expect("Failed to diff JSON");
 
-        let version_change = diff.version.unwrap();
+        assert!(diff.has_changes());
+
+        let version_change = &diff.version.unwrap();
 
         assert_eq!("3.0.0", version_change.from);
         assert_eq!("3.1.0", version_change.to);
+    }
+
+    #[test]
+    fn identical_files() {
+        let diff = diff_files(
+            PathBuf::from("fixtures/pet-store.json"),
+            PathBuf::from("fixtures/pet-store.json"),
+        )
+        .expect("Failed to diff JSON");
+
+        assert_eq!(false, diff.has_changes());
     }
 
     #[test]
