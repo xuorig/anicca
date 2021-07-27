@@ -17,6 +17,11 @@ impl Printer {
     pub fn print(diff: &Diff) -> String {
         let mut result = String::new();
 
+        if !diff.has_changes() {
+            result.push_str("No changes.");
+            return result;
+        }
+
         result.push_str("# OpenAPI diff\n\n");
 
         let meta = MetaPrinter { diff: &diff }.print();
@@ -28,5 +33,17 @@ impl Printer {
         }
 
         result
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::diff::Diff;
+
+    #[test]
+    fn no_changes() {
+        let diff = Diff::default();
+        assert_eq!("No changes.", Printer::print(&diff));
     }
 }
