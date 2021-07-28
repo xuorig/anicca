@@ -29,17 +29,15 @@ impl<'a> PathsPrinter<'a> {
             return result;
         }
 
-        result.push_str("### Changed\n\n");
-
         for (path, path_item_diff) in &self.diff.changed {
-            result.push_str(format!("##### `{}`\n", path).as_str());
+            result.push_str(format!("  - On path `{}`\n", path).as_str());
 
             for operation_method in &path_item_diff.operations_added {
                 match &operation_method.1.operation_id {
                     Some(op_id) => {
                         result.push_str(
                             format!(
-                                "  - Operation {} was added for method {}\n",
+                                "    - Operation {} was added for method {}\n",
                                 op_id, operation_method.0
                             )
                             .as_str(),
@@ -48,7 +46,7 @@ impl<'a> PathsPrinter<'a> {
                     None => {
                         result.push_str(
                             format!(
-                                "  - An operation without an id was added for method {}\n",
+                                "    - An operation without an id was added for method {}\n",
                                 operation_method.0
                             )
                             .as_str(),
@@ -57,14 +55,12 @@ impl<'a> PathsPrinter<'a> {
                 }
             }
 
-            result.push('\n');
-
             for operation_method in &path_item_diff.operations_removed {
                 match &operation_method.1.operation_id {
                     Some(op_id) => {
                         result.push_str(
                             format!(
-                                "  - Operation {} was removed for method {}\n",
+                                "    - Operation {} was removed for method {}\n",
                                 op_id, operation_method.0
                             )
                             .as_str(),
@@ -73,7 +69,7 @@ impl<'a> PathsPrinter<'a> {
                     None => {
                         result.push_str(
                             format!(
-                                "  - An operation without an id was removed for method {}\n",
+                                "    - An operation without an id was removed for method {}\n",
                                 operation_method.0
                             )
                             .as_str(),
@@ -83,7 +79,9 @@ impl<'a> PathsPrinter<'a> {
             }
 
             for (method, operation_diff) in &path_item_diff.operations_changed {
-                result.push_str(format!("##### `{} {}`\n\n", method.to_uppercase(), path).as_str());
+                result.push_str(
+                    format!("    - On operation `{} {}`\n", method.to_uppercase(), path).as_str(),
+                );
 
                 let op_diff = OperationsPrinter {
                     operation_diff: &operation_diff,
@@ -106,10 +104,8 @@ impl<'a> PathsPrinter<'a> {
             return result;
         }
 
-        result.push_str("### Removed\n\n");
-
         for removed in &self.diff.removed {
-            result.push_str(format!("  - {}\n", removed.0).as_str());
+            result.push_str(format!("  - Path `{}` was removed. (Breaking)\n", removed.0).as_str());
         }
 
         result.push('\n');
@@ -124,14 +120,12 @@ impl<'a> PathsPrinter<'a> {
             return result;
         }
 
-        result.push_str("### Added\n\n");
-
         for added in &self.diff.added {
             if let ReferenceOr::Item(path_item) = &added.1 {
                 if let Some(get) = &path_item.get {
                     result.push_str(
                         format!(
-                            "  - {} {} ({})\n",
+                            "  - {} {} (`{}`) was added.\n",
                             "GET",
                             added.0,
                             get.operation_id.clone().unwrap_or("No operation id".into())
@@ -143,7 +137,7 @@ impl<'a> PathsPrinter<'a> {
                 if let Some(post) = &path_item.post {
                     result.push_str(
                         format!(
-                            "  - {} {} ({})\n",
+                            "  - {} {} (`{}`) was added.\n",
                             "POST",
                             added.0,
                             post.operation_id
@@ -157,7 +151,7 @@ impl<'a> PathsPrinter<'a> {
                 if let Some(put) = &path_item.put {
                     result.push_str(
                         format!(
-                            "  - {} {} ({})\n",
+                            "  - {} {} (`{}`) was added.\n",
                             "PUT",
                             added.0,
                             put.operation_id.clone().unwrap_or("No operation id".into())
@@ -169,7 +163,7 @@ impl<'a> PathsPrinter<'a> {
                 if let Some(patch) = &path_item.patch {
                     result.push_str(
                         format!(
-                            "  - {} {} ({})\n",
+                            "  - {} {} (`{}`) was added.\n",
                             "PATCH",
                             added.0,
                             patch

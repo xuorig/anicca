@@ -13,7 +13,8 @@ impl<'a> ParametersPrinter<'a> {
             match param {
                 ReferenceOr::Reference { reference } => {
                     result.push_str(
-                        format!("  - Referenced parameter `{}` was added.\n", reference).as_str(),
+                        format!("      - Referenced parameter `{}` was added.\n", reference)
+                            .as_str(),
                     );
                 }
                 ReferenceOr::Item(param) => match param {
@@ -24,8 +25,11 @@ impl<'a> ParametersPrinter<'a> {
                         allow_empty_value: _,
                     } => {
                         result.push_str(
-                            format!("  - Query parameter `{}` was added.\n", parameter_data.name)
-                                .as_str(),
+                            format!(
+                                "       - Query parameter `{}` was added.\n",
+                                parameter_data.name
+                            )
+                            .as_str(),
                         );
                     }
                     Parameter::Header {
@@ -33,7 +37,8 @@ impl<'a> ParametersPrinter<'a> {
                         style: _,
                     } => {
                         result.push_str(
-                            format!("  - Header `{}` was added.\n", parameter_data.name).as_str(),
+                            format!("      - Header `{}` was added.\n", parameter_data.name)
+                                .as_str(),
                         );
                     }
                     Parameter::Path {
@@ -41,8 +46,11 @@ impl<'a> ParametersPrinter<'a> {
                         style: _,
                     } => {
                         result.push_str(
-                            format!("  - Path parameter `{}` was added.\n", parameter_data.name)
-                                .as_str(),
+                            format!(
+                                "      - Path parameter `{}` was added.\n",
+                                parameter_data.name
+                            )
+                            .as_str(),
                         );
                     }
                     Parameter::Cookie {
@@ -50,7 +58,8 @@ impl<'a> ParametersPrinter<'a> {
                         style: _,
                     } => {
                         result.push_str(
-                            format!("  - Cookie `{}` was added.\n", parameter_data.name).as_str(),
+                            format!("      - Cookie `{}` was added.\n", parameter_data.name)
+                                .as_str(),
                         );
                     }
                 },
@@ -61,7 +70,11 @@ impl<'a> ParametersPrinter<'a> {
             match param {
                 ReferenceOr::Reference { reference } => {
                     result.push_str(
-                        format!("  - Referenced parameter `{}` was removed.\n", reference).as_str(),
+                        format!(
+                            "      - Referenced parameter `{}` was removed.\n",
+                            reference
+                        )
+                        .as_str(),
                     );
                 }
                 ReferenceOr::Item(param) => match param {
@@ -73,7 +86,7 @@ impl<'a> ParametersPrinter<'a> {
                     } => {
                         result.push_str(
                             format!(
-                                "  - Query parameter `{}` was removed.\n",
+                                "      - Query parameter `{}` was removed.\n",
                                 parameter_data.name
                             )
                             .as_str(),
@@ -84,7 +97,8 @@ impl<'a> ParametersPrinter<'a> {
                         style: _,
                     } => {
                         result.push_str(
-                            format!("  - Header `{}` was removed.\n", parameter_data.name).as_str(),
+                            format!("      - Header `{}` was removed.\n", parameter_data.name)
+                                .as_str(),
                         );
                     }
                     Parameter::Path {
@@ -93,7 +107,7 @@ impl<'a> ParametersPrinter<'a> {
                     } => {
                         result.push_str(
                             format!(
-                                "  - Path parameter `{}` was removed.\n",
+                                "      - Path parameter `{}` was removed.\n",
                                 parameter_data.name
                             )
                             .as_str(),
@@ -104,7 +118,8 @@ impl<'a> ParametersPrinter<'a> {
                         style: _,
                     } => {
                         result.push_str(
-                            format!("  - Cookie `{}` was removed.\n", parameter_data.name).as_str(),
+                            format!("      - Cookie `{}` was removed.\n", parameter_data.name)
+                                .as_str(),
                         );
                     }
                 },
