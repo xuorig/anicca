@@ -22,6 +22,9 @@ impl OperationDiff {
             || self.summary.is_some()
             || self.description.is_some()
             || self.operation_id.is_some()
+            || self.parameters.has_changes()
+            || self.request_body.is_some()
+            || self.responses.has_changes()
     }
 
     pub fn from_operations(base: &Operation, head: &Operation) -> Self {

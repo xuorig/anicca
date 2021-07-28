@@ -12,6 +12,8 @@ pub struct MediaTypeDiff {
 impl MediaTypeDiff {
     pub fn has_changes(&self) -> bool {
         self.schema_changed.is_some()
+            || self.schema_added.is_some()
+            || self.schema_removed.is_some()
     }
 
     pub fn from_media_types(base: &MediaType, head: &MediaType) -> Self {

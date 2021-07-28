@@ -42,7 +42,7 @@ paths:
                     id:
                       type: integer
                       format: int64
-                    name:
+                    other:
                       type: string
                     tag:
                       type: string

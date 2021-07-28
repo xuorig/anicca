@@ -23,6 +23,8 @@ impl SchemaDiff {
             || self.format_changed.is_some()
             || self.required_changed.is_some()
             || self.enum_changed.is_some()
+            || self.items_changed.is_some()
+            || self.nullable_changed.is_some()
     }
 
     pub fn from_schemas(base: &ReferenceOr<Schema>, head: &ReferenceOr<Schema>) -> Self {
@@ -71,11 +73,6 @@ impl SchemaDiff {
                     diff.items_changed = Some(Box::new(items_diff))
                 }
             }
-        }
-
-        let properties_diff = PropertiesDiff::from_schemas(&base_schema, &head_schema);
-        if properties_diff.has_changes() {
-            diff.properties_changed = Some(properties_diff);
         }
 
         let base_nullable = base_schema.nullable.unwrap_or(false);

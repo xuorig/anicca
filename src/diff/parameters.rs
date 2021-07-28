@@ -11,6 +11,10 @@ pub struct ParametersDiff {
 }
 
 impl ParametersDiff {
+    pub fn has_changes(&self) -> bool {
+        !self.added.is_empty() || !self.removed.is_empty() || !self.changed.is_empty()
+    }
+
     pub fn param_name(param: &Parameter) -> String {
         match param {
             Parameter::Query {

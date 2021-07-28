@@ -9,6 +9,8 @@ impl<'a> SchemaPrinter<'a> {
     pub fn print(&self) -> String {
         let mut result = String::new();
 
+        println!("{:?}", self.diff);
+
         if let Some(type_change) = &self.diff.type_changed {
             result.push_str(&format!(
                 "{:indent$}- Schema type changed from `{}` to `{}`.\n",
@@ -53,6 +55,22 @@ impl<'a> SchemaPrinter<'a> {
                 .print();
                 result.push_str(&schema_diff);
             }
+        }
+
+        if let Some(items_diff) = &self.diff.items_changed {
+            result.push_str(&format!(
+                "{:indent$}- Items schema changed:\n",
+                "",
+                indent = self.indent
+            ));
+
+            let schema_diff = SchemaPrinter {
+                diff: items_diff,
+                indent: self.indent + 2,
+            }
+            .print();
+
+            result.push_str(&schema_diff);
         }
 
         result

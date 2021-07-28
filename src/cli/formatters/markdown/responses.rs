@@ -46,7 +46,7 @@ impl<'a> ResponsesPrinter<'a> {
 
                 for (media_type, media_type_diff) in &content_diff.changed {
                     result.push_str(&format!(
-                        "        - Response media type `{}` changed:.\n",
+                        "        - Response media type `{}` changed:\n",
                         media_type
                     ));
 
