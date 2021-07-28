@@ -9,8 +9,6 @@ impl<'a> MetaPrinter<'a> {
     pub fn print(&self) -> String {
         let mut result = String::new();
 
-        result.push_str("## General\n\n");
-
         if let Some(version_change) = &self.diff.version {
             result.push_str(
                 format!(

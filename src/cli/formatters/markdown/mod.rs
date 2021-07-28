@@ -22,7 +22,7 @@ impl Printer {
             return result;
         }
 
-        result.push_str("# OpenAPI diff\n\n");
+        result.push_str("## OpenAPI diff\n\n");
 
         let meta = MetaPrinter { diff: &diff }.print();
         result.push_str(&meta);

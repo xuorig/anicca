@@ -10,7 +10,11 @@ impl<'a> PathsPrinter<'a> {
     pub fn print(&self) -> String {
         let mut result = String::new();
 
-        result.push_str("## Paths\n\n");
+        if !self.diff.has_changes() {
+            return result;
+        }
+
+        result.push_str("### Paths\n\n");
         result.push_str(&self.print_added_paths());
         result.push_str(&self.print_removed_paths());
         result.push_str(&self.print_changed_paths());
@@ -20,6 +24,10 @@ impl<'a> PathsPrinter<'a> {
 
     pub fn print_changed_paths(&self) -> String {
         let mut result = String::new();
+
+        if self.diff.changed.is_empty() {
+            return result;
+        }
 
         result.push_str("### Changed\n\n");
 
@@ -94,6 +102,10 @@ impl<'a> PathsPrinter<'a> {
     pub fn print_removed_paths(&self) -> String {
         let mut result = String::new();
 
+        if self.diff.removed.is_empty() {
+            return result;
+        }
+
         result.push_str("### Removed\n\n");
 
         for removed in &self.diff.removed {
@@ -107,6 +119,10 @@ impl<'a> PathsPrinter<'a> {
 
     pub fn print_added_paths(&self) -> String {
         let mut result = String::new();
+
+        if self.diff.added.is_empty() {
+            return result;
+        }
 
         result.push_str("### Added\n\n");
 
