@@ -49,6 +49,14 @@ paths:
     post:
       summary: Create a pet
       operationId: createPets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                other:
+                  type: string
       tags:
         - pets
       responses:

@@ -1,0 +1,15 @@
+content:
+  application/json:
+    schema:
+      properties:
+        title:
+          type: string
+        body:
+          description: The comment text.
+          type: string
+          maxLength: 65535
+          example: Body of the attachment
+      type: object
+      required:
+        - body
+required: true

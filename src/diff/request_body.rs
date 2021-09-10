@@ -71,3 +71,22 @@ impl RequestBodyDiff {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::path::PathBuf;
+
+    #[test]
+    fn property_removed() {
+        let base_body_string = std::fs::read_to_string(PathBuf::from("fixtures/request_body.yaml")).expect("Failed to parse request body");
+        let head_body_string = std::fs::read_to_string(PathBuf::from("fixtures/request_body_property_removed.yaml")).expect("Failed to parse request body");
+        let base_body: RequestBody = serde_yaml::from_str(&base_body_string).expect("Failed to parse request body");
+        let head_body: RequestBody = serde_yaml::from_str(&head_body_string).expect("Failed to parse request body");
+
+        let diff = RequestBodyDiff::from_request_bodies(&Some(ReferenceOr::Item(base_body)), &Some(ReferenceOr::Item(head_body)));
+
+        assert!(diff.has_changes());
+        assert!(!diff.content_changed.unwrap().changed.is_empty());
+    }
+}

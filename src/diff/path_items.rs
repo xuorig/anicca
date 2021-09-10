@@ -74,6 +74,80 @@ impl PathItemDiff {
             },
         }
 
+        match &base_path_item.post {
+            Some(op) => match &head_path_item.post {
+                Some(head_op) => {
+                    let diff = OperationDiff::from_operations(op, head_op);
+
+                    if diff.has_changes() {
+                        operations_changed.insert(String::from("post"), diff);
+                    }
+                }
+                None => {
+                    // Removed
+                    operations_removed.push((String::from("post"), op.clone()));
+                }
+            },
+            None => match &head_path_item.post {
+                Some(head_op) => {
+                    // Added
+                    operations_added.push((String::from("post"), head_op.clone()));
+                }
+                None => {}
+            },
+        }
+
+        match &base_path_item.put {
+            Some(op) => match &head_path_item.put {
+                Some(head_op) => {
+                    let diff = OperationDiff::from_operations(op, head_op);
+
+                    if diff.has_changes() {
+                        operations_changed.insert(String::from("put"), diff);
+                    }
+                }
+                None => {
+                    // Removed
+                    operations_removed.push((String::from("put"), op.clone()));
+                }
+            },
+            None => match &head_path_item.put {
+                Some(head_op) => {
+                    // Added
+                    operations_added.push((String::from("put"), head_op.clone()));
+                }
+                None => {}
+            },
+        }
+
+        match &base_path_item.patch {
+            Some(op) => match &head_path_item.patch {
+                Some(head_op) => {
+                    let diff = OperationDiff::from_operations(op, head_op);
+
+                    if diff.has_changes() {
+                        operations_changed.insert(String::from("patch"), diff);
+                    }
+                }
+                None => {
+                    // Removed
+                    operations_removed.push((String::from("patch"), op.clone()));
+                }
+            },
+            None => match &head_path_item.patch {
+                Some(head_op) => {
+                    // Added
+                    operations_added.push((String::from("patch"), head_op.clone()));
+                }
+                None => {}
+            },
+        }
+
+
+
+
+
+
         Ok(Self {
             operations_added,
             operations_removed,
