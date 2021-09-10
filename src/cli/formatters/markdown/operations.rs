@@ -14,7 +14,7 @@ impl<'a> OperationsPrinter<'a> {
         if !self.operation_diff.tags.added.is_empty() {
             result.push_str(
                 format!(
-                    "      - Tags were added: `{}`\n",
+                    "    - Tags were added: `{}`\n",
                     self.operation_diff.tags.added.join(",")
                 )
                 .as_str(),
@@ -24,7 +24,7 @@ impl<'a> OperationsPrinter<'a> {
         if !self.operation_diff.tags.removed.is_empty() {
             result.push_str(
                 format!(
-                    "      - Tags were removed: `{}`\n",
+                    "    - Tags were removed: `{}`\n",
                     self.operation_diff.tags.removed.join(",")
                 )
                 .as_str(),
@@ -36,29 +36,29 @@ impl<'a> OperationsPrinter<'a> {
                 if let Some(to) = &summary_diff.to {
                     result.push_str(
                         format!(
-                            "      - Operation summary changed from `{}` to `{}`.\n",
+                            "    - Operation summary changed from `{}` to `{}`.\n",
                             from, to
                         )
                         .as_str(),
                     );
                 } else {
-                    result.push_str("      - Operation summary was removed.\n");
+                    result.push_str("    - Operation summary was removed.\n");
                 }
             } else if let Some(to) = &summary_diff.to {
-                result.push_str(format!("      - Operation summary added: `{}`\n", to).as_str());
+                result.push_str(format!("    - Operation summary added: `{}`\n", to).as_str());
             }
         }
 
         if let Some(diff) = &self.operation_diff.description {
             if let Some(_from) = &diff.from {
                 if let Some(_to) = &diff.to {
-                    result.push_str("      - Operation description was changed.\n");
+                    result.push_str("    - Operation description was changed.\n");
                 } else {
-                    result.push_str("      - Operation description was removed.\n");
+                    result.push_str("    - Operation description was removed.\n");
                 }
             } else if let Some(to) = &diff.to {
                 result
-                    .push_str(format!("      - Operation description added: `{}`\n", to).as_str());
+                    .push_str(format!("    - Operation description added: `{}`\n", to).as_str());
             }
         }
 
@@ -66,14 +66,14 @@ impl<'a> OperationsPrinter<'a> {
             if let Some(from) = &diff.from {
                 if let Some(to) = &diff.to {
                     result.push_str(
-                        format!("      - Operation id changed from `{}` to `{}`\n", from, to)
+                        format!("    - Operation id changed from `{}` to `{}`\n", from, to)
                             .as_str(),
                     );
                 } else {
-                    result.push_str("      - Operation id was removed.\n");
+                    result.push_str("    - Operation id was removed.\n");
                 }
             } else if let Some(to) = &diff.to {
-                result.push_str(format!("      - Operation id added: `{}`\n", to).as_str());
+                result.push_str(format!("    - Operation id added: `{}`\n", to).as_str());
             }
         }
 

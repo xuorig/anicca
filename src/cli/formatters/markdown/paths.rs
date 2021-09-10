@@ -30,15 +30,13 @@ impl<'a> PathsPrinter<'a> {
         }
 
         for (path, path_item_diff) in &self.diff.changed {
-            result.push_str(format!("  - On path `{}`\n", path).as_str());
-
             for operation_method in &path_item_diff.operations_added {
                 match &operation_method.1.operation_id {
                     Some(op_id) => {
                         result.push_str(
                             format!(
-                                "    - Operation {} was added for method {}\n",
-                                op_id, operation_method.0
+                                "  - Operation {} {} was added ({}).\n",
+                                operation_method.0, path, op_id 
                             )
                             .as_str(),
                         );
@@ -46,8 +44,8 @@ impl<'a> PathsPrinter<'a> {
                     None => {
                         result.push_str(
                             format!(
-                                "    - An operation without an id was added for method {}\n",
-                                operation_method.0
+                                "  - Operation {} {} was added (Missing operationId).\n",
+                                operation_method.0, path
                             )
                             .as_str(),
                         );
@@ -60,8 +58,8 @@ impl<'a> PathsPrinter<'a> {
                     Some(op_id) => {
                         result.push_str(
                             format!(
-                                "    - Operation {} was removed for method {}\n",
-                                op_id, operation_method.0
+                                "  - Operation {} {} was removed ({}).\n",
+                                operation_method.0, path, op_id
                             )
                             .as_str(),
                         );
@@ -69,8 +67,8 @@ impl<'a> PathsPrinter<'a> {
                     None => {
                         result.push_str(
                             format!(
-                                "    - An operation without an id was removed for method {}\n",
-                                operation_method.0
+                                "  - Operation {} {} was removed (Missing operationId).\n",
+                                operation_method.0, path
                             )
                             .as_str(),
                         );
@@ -80,7 +78,7 @@ impl<'a> PathsPrinter<'a> {
 
             for (method, operation_diff) in &path_item_diff.operations_changed {
                 result.push_str(
-                    format!("    - On operation `{} {}`\n", method.to_uppercase(), path).as_str(),
+                    format!("  - On operation `{} {}`\n", method.to_uppercase(), path).as_str(),
                 );
 
                 let op_diff = OperationsPrinter {
@@ -105,7 +103,7 @@ impl<'a> PathsPrinter<'a> {
         }
 
         for removed in &self.diff.removed {
-            result.push_str(format!("  - Path `{}` was removed. (Breaking)\n", removed.0).as_str());
+            result.push_str(format!("  - Path `{}` was removed.\n", removed.0).as_str());
         }
 
         result.push('\n');
