@@ -19,6 +19,14 @@ impl<'a> SchemaPrinter<'a> {
             ));
         }
 
+        if self.diff.description_changed.is_some() {
+            result.push_str(&format!(
+                "{:indent$}- Schema description changed.\n",
+                "",
+                indent = self.indent,
+            ));
+        }
+
         if let Some(properties_diff) = &self.diff.properties_changed {
             for p in &properties_diff.added {
                 result.push_str(&format!(
